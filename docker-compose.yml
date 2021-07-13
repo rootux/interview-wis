@@ -1,0 +1,42 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:13.3
+    ports:
+      - "5431:5432"
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: db
+    volumes:
+      - ./db/data/postgres:/var/lib/postgresql/data
+
+  db-test:
+    image: postgres:13.3
+    ports:
+      - "5430:5432"
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: db-test
+    volumes:
+      - ./db/data-test/postgres:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: ./
+      target: dev
+    depends_on:
+      - db
+      - db-test
+    volumes:
+      - .:/src
+    command: sh -c "npm run start:dev"
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+      DB_URL: postgres://user:pass@db:5432/db
+      DB_TEST_URL: postgres://user:pass@db-test:5432/db-test
+      DEBUG: wisdo:*
+    restart: on-failure

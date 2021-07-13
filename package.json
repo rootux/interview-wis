@@ -1,0 +1,40 @@
+{
+  "name": "wisdo",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node src/bin/www.ts",
+    "start:dev": "nodemon -T src/bin/www.ts",
+    "test": "NODE_ENV=test jest --runInBand",
+    "seed": "ts-node src/scripts/seed.ts"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "morgan": "~1.9.1",
+    "pg": "^8.6.0",
+    "reflect-metadata": "^0.1.13",
+    "sequelize": "^6.6.5",
+    "sequelize-typescript": "^2.1.0"
+  },
+  "devDependencies": {
+    "@trendyol/jest-testcontainers": "^2.1.0",
+    "@types/cookie-parser": "^1.4.2",
+    "@types/debug": "^4.1.6",
+    "@types/faker": "^5.5.7",
+    "@types/http-errors": "^1.8.1",
+    "@types/jest": "^26.0.24",
+    "@types/morgan": "^1.9.3",
+    "@types/node": "^16.0.0",
+    "@types/validator": "^13.6.3",
+    "dotenv": "^10.0.0",
+    "faker": "^5.5.3",
+    "jest": "^27.0.6",
+    "supertest": "^6.1.3",
+    "ts-jest": "^27.0.3",
+    "ts-node": "^10.0.0",
+    "typescript": "^4.3.5"
+  }
+}
