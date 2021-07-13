@@ -1,9 +1,9 @@
-import sequelize from '../db/sequelize';
+import db from '../db/models/db.models';
 
 // We use a transaction so client won't get deleted rows
 (async () => {
   console.log('Updating feed...');
-  const [results, metadata] = await sequelize.query(`
+  const [results, metadata] = await db.sequelize.query(`
     BEGIN TRANSACTION;
     DELETE from rankingByReaction;
     INSERT INTO rankingByReaction (ranking, postId,country)

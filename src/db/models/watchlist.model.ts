@@ -15,13 +15,13 @@ interface WatchlistInstance extends Model<WatchlistAttributes, Watchlist>,
 module.exports = (sequelize: Sequelize, DataTypes: any) => {
   return sequelize.define<WatchlistInstance>('Watchlist', {
     id: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
       unique: true
     },
     word: {
-      type: DataTypes.String,
+      type: DataTypes.STRING,
     },
     }
   );

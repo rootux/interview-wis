@@ -38,7 +38,7 @@ app.use(function(err: HttpError, req: Request, res: Response, next: NextFunction
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.send(`Oops ${err.status} - ${err.message}`);
 });
 
 export default app;

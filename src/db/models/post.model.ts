@@ -6,7 +6,7 @@ enum PostStatus {
 }
 
 interface PostAttributes {
-  id: string;
+  id?: number;
   title: string;
   summary: string;
   body: string;
@@ -27,7 +27,7 @@ interface PostInstance extends Model<PostAttributes, PostCreationAttributes>,
 module.exports = (sequelize: Sequelize, DataTypes: any) => {
   const Post = sequelize.define<PostInstance>('Post', {
     id: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
       unique: true
@@ -72,10 +72,13 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
     }
   });
 
-  Post.addHook('beforeUpdate', (post: any) => {
-    // @ts-ignore
-    post.length = post.previous.body.length;
-  })
+  // @ts-ignore
+  Post.registerHooks = () => {
+    Post.addHook('beforeUpdate', (post: any) => {
+      // @ts-ignore
+      post.length = post.previous.body.length;
+    })
+  }
 
   return Post;
 };

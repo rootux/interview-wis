@@ -1,7 +1,5 @@
-import Post from "../db/models/post.model";
 
-const faker = require('faker');
-import sequelize from '../db/sequelize';
+import db from '../db/models/db.models';
 import { sampleRandom } from '../utils/utils.array';
 import {
   associateUsersToRandomCommunities,
@@ -20,7 +18,7 @@ const createFakePost = async (users: any[]) => {
 
 (async () => {
   console.log('Syncing database...');
-  await sequelize.sync({force: true}); // This would drop old data // TODO: given more time we should use sequalize migrations and seed
+  await db.sequelize.sync({force: true}); // This would drop old data // TODO: given more time we should use sequalize migrations and seed
   console.log('Seeding database...');
   // TODO: Promise.all
   const users = [];
@@ -31,7 +29,7 @@ const createFakePost = async (users: any[]) => {
   for(let i=0;i<10;i++) {
     communities.push(await createMockCommunity());
   }
-  await associateUsersToRandomCommunities(users, communities);
+  await associateUsersToRandomCommunities(users, communities, 5);
   for(let i=0;i<10;i++) {
     await createFakePost(users);
   }

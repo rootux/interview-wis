@@ -1,6 +1,5 @@
 import {Request, Response} from "express";
-import Post from "../db/models/post.model";
-import db from '../db/models';
+import db from '../db/models/db.models';
 
 export class PostService {
   static createPost = async ( req: Request, res: Response) => {
@@ -15,7 +14,7 @@ export class PostService {
       summary = body.split(' ').slice(NUMBER_OF_SUMMARY_WORDS).map((s: string) => s + " ");
       summary.splice(-1,1); // remove the last ' '
     }
-    await db.postPost.create({title, summary}); // TODO
+    await db.Post.create({title, summary}); // TODO
     return res.send('Created post');
   }
 }

@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node src/bin/www.ts",
+    "start": "ts-node src/bin/www.ts",
     "start:dev": "nodemon -T src/bin/www.ts",
     "test": "NODE_ENV=test jest --runInBand",
     "seed": "ts-node src/scripts/seed.ts"
@@ -28,6 +28,7 @@
     "@types/jest": "^26.0.24",
     "@types/morgan": "^1.9.3",
     "@types/node": "^16.0.0",
+    "@types/supertest": "^2.0.11",
     "@types/validator": "^13.6.3",
     "dotenv": "^10.0.0",
     "faker": "^5.5.3",

@@ -6,13 +6,13 @@ enum Roles {
   superModerator='super moderator'
 }
 
-interface UserAttributes {
-  id: string;
+export interface UserAttributes {
+  id?: number;
   name: string;
   email: string;
   image: string;
   country: string;
-  role: Roles
+  role?: Roles
 }
 
 interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
@@ -27,11 +27,10 @@ interface UserInstance
 module.exports = (sequelize: Sequelize, DataTypes: any) => {
   const User = sequelize.define<UserInstance>('User', {
       id: {
-        allowNull: false,
-        autoIncrement: false,
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
         primaryKey: true,
-        type: DataTypes.UUID,
-        unique: true,
+        unique: true
       },
       name: {
         type: DataTypes.STRING,

@@ -19,7 +19,7 @@ interface RankByReactionInstance extends Model<RankByReactionAttributes, RankByR
 module.exports = (sequelize: Sequelize, DataTypes: any) => {
   return sequelize.define<RankByReactionInstance>('RankByReaction', {
     id: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
       unique: true

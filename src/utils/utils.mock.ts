@@ -1,12 +1,11 @@
 const faker = require('faker');
 import { sampleRandom } from './utils.array';
-const User = require('../db/models/user.model').default;
-import Post from "../db/models/post.model";
+import db from "../db/models/db.models";
 const Community = require('../db/models/community.model').default;
 const countries = require('../user/user.countries.enum').default;
 
 export function createMockUser() {
-  return User.create({
+  return db.User.create({
     name: faker.name.findName(),
     country: sampleRandom(countries),
     email: faker.internet.email(),
@@ -31,7 +30,7 @@ export async function associateUsersToRandomCommunities(users:any[], communities
 }
 
 export async function createMockPost(user:any, communityId:any) {
-  return Post.create({
+  return db.Post.create({
     title: faker.name.findName(),
     summary: faker.lorem.word(),
     body: faker.lorem.word(),

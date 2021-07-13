@@ -3,7 +3,7 @@ services:
   db:
     image: postgres:13.3
     ports:
-      - "5431:5432"
+      - "5432:5431"
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: pass
@@ -14,7 +14,7 @@ services:
   db-test:
     image: postgres:13.3
     ports:
-      - "5430:5432"
+      - "5432:5430"
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: pass
@@ -36,7 +36,7 @@ services:
       - "3000:3000"
     environment:
       NODE_ENV: development
-      DB_URL: postgres://user:pass@db:5432/db
-      DB_TEST_URL: postgres://user:pass@db-test:5432/db-test
+      DB_URL: postgres://user:pass@db:5431/db
+      DB_TEST_URL: postgres://user:pass@db-test:5430/db-test
       DEBUG: wisdo:*
     restart: on-failure

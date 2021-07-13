@@ -9,7 +9,7 @@ Then the server would be up on http://localhost:3000
 npm i -g nodemon
 npm i
 docker-compose up -d db
-npm run start
+npm run start:dev
 ```
 
 Dockerfile - uses multi-stage build - has dev and production envs
@@ -22,9 +22,13 @@ hooks - allows any update to post / create to trigger an email if content is in 
 
 
 ## Comments
-1. This is my first production like Typescript project so I may error on the side of types and where to put declarations -
-I wanted to try typescript as recommended but this may not be the most well structured typescript
+1. This is my first production like Typescript project. I may error on the side of types and where to put declarations -
+I wanted to try typescript as recommended but this may not be the most well-structured typescript
 2. I've used post reactions with reaction type to support different reaction in the future (Love, Cry,...)
-3. Given more time I would use an input validation framework instead of validating data.
-4. Some issue that might happen - if a user scrolls the system and now we are on the 3 hours window - 
+3. Given more time, I would use an "input validation framework" instead of validating data.
+4. Some race condition that might happen - if a user scrolls the system, and now we are on the 3 hours window - 
 trying to fetch next would result inaccurate data.
+   
+## Alternative Designs
+1. An alternative to `sequelize` would be [prisma](https://www.prisma.io/) which is a raising star -
+I don't have enough experience with it - given more time - I might consider it
