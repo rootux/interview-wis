@@ -5,7 +5,7 @@
   "scripts": {
     "start": "ts-node src/bin/www.ts",
     "start:dev": "nodemon -T src/bin/www.ts",
-    "test": "NODE_ENV=test jest --runInBand",
+    "test": "docker-compose up -d db-test && cross-env NODE_ENV=test jest --runInBand",
     "seed": "ts-node src/scripts/seed.ts"
   },
   "dependencies": {
@@ -30,6 +30,7 @@
     "@types/node": "^16.0.0",
     "@types/supertest": "^2.0.11",
     "@types/validator": "^13.6.3",
+    "cross-env": "^7.0.3",
     "dotenv": "^10.0.0",
     "faker": "^5.5.3",
     "jest": "^27.0.6",
