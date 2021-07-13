@@ -39,6 +39,8 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
         },
       }
 
+    }, {
+      freezeTableName: true
     }
   );
 };

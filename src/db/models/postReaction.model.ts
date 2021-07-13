@@ -42,5 +42,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
       defaultValue: 1,
       allowNull: false,
     }
+  }, {
+    freezeTableName: true
   });
 }

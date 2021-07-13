@@ -25,7 +25,7 @@ interface PostInstance extends Model<PostAttributes, PostCreationAttributes>,
 }
 
 module.exports = (sequelize: Sequelize, DataTypes: any) => {
-  const Post = sequelize.define<PostInstance>('Post', {
+  const Post:any = sequelize.define<PostInstance>('Post', {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -70,13 +70,13 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
       defaultValue: 'pending',
       allowNull: false
     }
+  }, {
+    freezeTableName: true
   });
 
-  // @ts-ignore
   Post.registerHooks = () => {
-    Post.addHook('beforeUpdate', (post: any) => {
-      // @ts-ignore
-      post.length = post.previous.body.length;
+    Post.addHook('beforeValidate', (post:any) => {
+      post.dataValues.length = post.dataValues.body.length;
     })
   }
 

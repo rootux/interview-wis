@@ -66,7 +66,8 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
       }
 
     }, {
-      indexes: [{unique: true, fields: ['email']}]
+      indexes: [{unique: true, fields: ['email']}],
+      freezeTableName: true
     }
   );
 

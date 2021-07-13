@@ -1,7 +1,6 @@
 const faker = require('faker');
 import { sampleRandom } from './utils.array';
 import db from "../db/models/db.models";
-const Community = require('../db/models/community.model').default;
 const countries = require('../user/user.countries.enum').default;
 
 export function createMockUser() {
@@ -14,8 +13,8 @@ export function createMockUser() {
 }
 
 export function createMockCommunity() {
-  return Community.create({
-    title: faker.name.findName(),
+  return db.Community.create({
+    title: faker.company.companyName(),
     image: faker.image.business(),
   });
 }

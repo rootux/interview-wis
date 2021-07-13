@@ -41,6 +41,8 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
        values: countries,
        allowNull: false
      }
-   }
+   }, {
+    freezeTableName: true
+  }
  );
 }
