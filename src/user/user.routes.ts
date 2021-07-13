@@ -12,7 +12,10 @@ router.post('/', async (req: Request, res: Response) => {
   if(req.body === 'TODO MISSING DATA') {
     return res.status(400).send(`Missing UserAttributes`); // TODO: add some auto validator based on typescript interface
   }
-  const user = await UserService.create(req.body);
+  const {name, email, image, country} = req.body;
+  const cleanedReq = {name, email, image, country}
+  const user = await UserService.create(cleanedReq);
+
   res.send(user)
 }
 )

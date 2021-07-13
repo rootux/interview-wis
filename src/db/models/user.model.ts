@@ -1,10 +1,6 @@
 import countries from '../../user/user.countries.enum';
 import {Model, Optional, Sequelize} from "sequelize";
-
-enum Roles {
-  moderator='moderator',
-  superModerator='super moderator'
-}
+import RolesValues,{Roles} from "../../user/user.roles.enum";
 
 export interface UserAttributes {
   id?: number;
@@ -62,7 +58,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
       },
       role: {
         type: DataTypes.ENUM,
-        values: ['moderator', 'super moderator']
+        values: RolesValues
       }
 
     }, {

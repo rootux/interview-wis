@@ -1,4 +1,5 @@
-import {Model, Optional, Sequelize} from "sequelize";
+import {Model, Optional, Sequelize} from "sequelize"
+import {getFirstWords} from "../../utils/utils.array";
 
 enum PostStatus {
   pending,
@@ -6,22 +7,22 @@ enum PostStatus {
 }
 
 interface PostAttributes {
-  id?: number;
-  title: string;
-  summary: string;
-  body: string;
-  communityId: string;
-  length: number;
-  userId: string;
-  status: PostStatus;
+  id?: number
+  title: string
+  summary?: string
+  body: string
+  communityId: string
+  length: number
+  userId: string
+  status: PostStatus
 }
 
 interface PostCreationAttributes extends Optional<PostAttributes, 'id'> {}
 
 interface PostInstance extends Model<PostAttributes, PostCreationAttributes>,
     PostAttributes {
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt?: Date
+  updatedAt?: Date
 }
 
 module.exports = (sequelize: Sequelize, DataTypes: any) => {
@@ -72,13 +73,17 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
     }
   }, {
     freezeTableName: true
-  });
+  })
+
 
   Post.registerHooks = () => {
     Post.addHook('beforeValidate', (post:any) => {
-      post.dataValues.length = post.dataValues.body.length;
+      post.dataValues.length = post.dataValues.body.length
+      if(!post.dataValues.summary) {
+        post.dataValues.summary = getFirstWords(post.dataValues.body, 100)
+      }
     })
   }
 
-  return Post;
-};
+  return Post
+}

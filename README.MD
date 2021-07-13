@@ -28,7 +28,9 @@ I wanted to try typescript as recommended but this may not be the most well-stru
 3. Given more time, I would use an "input validation framework" instead of validating data.
 4. Some race condition that might happen - if a user scrolls the system, and now we are on the 3 hours window - 
 trying to fetch next would result inaccurate data.
-   
+5. For production - I'll probably use redis for caching instead of node-cache (CacheService)
+6. I've seperated UserService.create and UserService.createWithRole to keep things secure - so it would be clear what does what
+
 ## Alternative Designs
 1. An alternative to `sequelize` would be [prisma](https://www.prisma.io/) which is a raising star -
 I don't have enough experience with it - given more time - I might consider it
