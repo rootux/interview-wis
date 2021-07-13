@@ -20,10 +20,11 @@ fs.readdirSync(__dirname)
       file !== basename);
   })
   .forEach((file: any) => {
-    console.log(`Loading model ${file}`);
     const model = require(path.join(__dirname, file))(sequelize, Sequelize);
     db[model.name] = model;
   });
+
+console.log(`Loaded ${Object.keys(db).length} models`);
 
 Object.keys(db).forEach((modelName) => {
   if (db[modelName].associate) {

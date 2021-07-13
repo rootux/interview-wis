@@ -29,11 +29,11 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
         unique: true
       },
       name: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(300),
         allowNull: false
       },
       email: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(254),
         set(val: string) {
           this.setDataValue('email', val.toLowerCase());
         },
@@ -49,7 +49,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
         }
       },
       image: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(2083),
       },
       country: {
         type: DataTypes.ENUM,

@@ -21,7 +21,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
       unique: true
     },
     word: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(100),
       allowNull: false
     },
     }, {

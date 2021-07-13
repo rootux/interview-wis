@@ -42,7 +42,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
       allowNull: false
     },
     body: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: false
     },
     communityId: {

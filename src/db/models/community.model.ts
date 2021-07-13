@@ -29,7 +29,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
         allowNull: false
       },
       image: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(2083),
         allowNull: false
       },
       memberCount: {

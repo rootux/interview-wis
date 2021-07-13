@@ -15,7 +15,7 @@ export default class WatchlistService {
       const wordsArray = (await db.Watchlist.findAll({
         attributes: ['word'],
         order: [['word', 'ASC']]}))
-        .map((obj:any) => obj.word);
+        .map((obj:any) => obj.word.toLowerCase());
       words = new Words(wordsArray);
       CacheService.set<Words>(key, words, WORDS_CACHE_TTL);
     }
@@ -25,17 +25,19 @@ export default class WatchlistService {
   static async isContentValid(content: string) {
     const words:Words = await WatchlistService.getWords();
     for(const word of content.split(' ')) {
-      if(words.has(word)) {
+      if(words.has(word.toLowerCase())) {
         return false;
       }
     }
-    return false;
+    return true;
   }
 
   static validate = async (content:string, postUrl:string) => {
     const isValid = await WatchlistService.isContentValid(content)
-    if(isValid) return;
+    if(isValid) return isValid;
     const emailParams = {to: ['johndoe@gmail.com'],subject: 'Post Trigger',body: `Post triggered a watchlist ${postUrl}`};
     EmailService.sendEmail(emailParams);
+    return isValid;
+
   }
 }
