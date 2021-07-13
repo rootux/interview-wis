@@ -22,6 +22,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
     },
     word: {
       type: DataTypes.STRING,
+      allowNull: false
     },
     }, {
       freezeTableName: true

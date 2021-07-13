@@ -1,5 +1,4 @@
 import EmailService from '../email/email.service';
-import Config from '../config/config';
 import CacheService from "../cache/cache.service";
 import db from '../db/models/db.models';
 
@@ -7,13 +6,16 @@ const WORDS_CACHE_TTL = 600; // 10 minutes
 
 class Words extends Set<string>{}
 
-export class WatchlistService {
+export default class WatchlistService {
 
-  static async getWords() {
+  static async getWords(): Promise<Words> {
     const key = 'WatchlistWords';
     let words:Words = CacheService.get<Words>(key)
     if(!words) {
-      const wordsArray = await db.Watchlist.findAll({order: [['word', 'ASC']]});
+      const wordsArray = (await db.Watchlist.findAll({
+        attributes: ['word'],
+        order: [['word', 'ASC']]}))
+        .map((obj:any) => obj.word);
       words = new Words(wordsArray);
       CacheService.set<Words>(key, words, WORDS_CACHE_TTL);
     }
