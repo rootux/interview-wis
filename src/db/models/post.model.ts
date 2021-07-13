@@ -1,6 +1,37 @@
+import {Model, Optional, Sequelize} from "sequelize";
 
-module.exports = (sequelize: any, DataTypes: any) => {
-const Post = sequelize.define('Post', {
+enum PostStatus {
+  pending,
+  approved
+}
+
+interface PostAttributes {
+  id: string;
+  title: string;
+  summary: string;
+  body: string;
+  communityId: string;
+  length: number;
+  userId: string;
+  status: PostStatus;
+}
+
+interface PostCreationAttributes extends Optional<PostAttributes, 'id'> {}
+
+interface PostInstance extends Model<PostAttributes, PostCreationAttributes>,
+    PostAttributes {
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+module.exports = (sequelize: Sequelize, DataTypes: any) => {
+  const Post = sequelize.define<PostInstance>('Post', {
+    id: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      autoIncrement: true,
+      primaryKey: true,
+      unique: true
+    },
     title: {
       type: DataTypes.STRING(60),
       allowNull: false
@@ -39,13 +70,12 @@ const Post = sequelize.define('Post', {
       defaultValue: 'pending',
       allowNull: false
     }
-  }
-);
+  });
 
-Post.addHook('beforeUpdate', (post: any) => {
-  // @ts-ignore
-  post.length = post.previous.body.length;
-})
+  Post.addHook('beforeUpdate', (post: any) => {
+    // @ts-ignore
+    post.length = post.previous.body.length;
+  })
 
-return Post;
+  return Post;
 };

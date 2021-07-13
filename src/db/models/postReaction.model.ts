@@ -1,20 +1,39 @@
-import { DataTypes } from 'sequelize';
-import sequelize from '../db/sequelize';
-import Post from './post.model';
-import User from './user.model';
+import {Model, Optional, Sequelize} from "sequelize";
 
-const PostReaction = sequelize.define('PostReaction', {
+interface PostReactionAttributes {
+  id: number;
+  postId: string;
+  userId: string;
+  reactionType: number;
+}
+
+interface PostReactionCreationAttributes extends Optional<PostReactionAttributes, 'id'> {}
+
+interface PostReactionInstance extends Model<PostReactionAttributes, PostReactionCreationAttributes>,
+  PostReactionAttributes {
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+module.exports = (sequelize: Sequelize, DataTypes: any) => {
+  return sequelize.define<PostReactionInstance>('PostReaction', {
+    id: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      autoIncrement: true,
+      primaryKey: true,
+      unique: true
+    },
     postId: {
       type: DataTypes.INTEGER,
       references: {
-        model: Post,
+        model: 'Post',
         key: 'id'
       }
     },
     userId: {
       type: DataTypes.INTEGER,
       references: {
-        model: User,
+        model: 'User',
         key: 'id'
       }
     },
@@ -23,6 +42,5 @@ const PostReaction = sequelize.define('PostReaction', {
       defaultValue: 1,
       allowNull: false,
     }
-  }
-);
-export default Post;
+  });
+}

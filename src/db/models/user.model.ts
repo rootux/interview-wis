@@ -1,8 +1,38 @@
 import countries from '../../user/user.countries.enum';
-import Community from "./community.model";
+import {Model, Optional, Sequelize} from "sequelize";
 
-module.exports = (sequelize: any, DataTypes: any) => {
-  const User = sequelize.define('User', {
+enum Roles {
+  moderator='moderator',
+  superModerator='super moderator'
+}
+
+interface UserAttributes {
+  id: string;
+  name: string;
+  email: string;
+  image: string;
+  country: string;
+  role: Roles
+}
+
+interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
+
+interface UserInstance
+  extends Model<UserAttributes, UserCreationAttributes>,
+    UserAttributes {
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+module.exports = (sequelize: Sequelize, DataTypes: any) => {
+  const User = sequelize.define<UserInstance>('User', {
+      id: {
+        allowNull: false,
+        autoIncrement: false,
+        primaryKey: true,
+        type: DataTypes.UUID,
+        unique: true,
+      },
       name: {
         type: DataTypes.STRING,
         allowNull: false
@@ -10,7 +40,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
       email: {
         type: DataTypes.STRING,
         set(val: string) {
-          User.setDataValue('email', val.toLowerCase())
+          this.setDataValue('email', val.toLowerCase());
         },
         unique: true,
         validate: {
@@ -37,17 +67,20 @@ module.exports = (sequelize: any, DataTypes: any) => {
       }
 
     }, {
-      indexes: [{fields: ['email']}]
+      indexes: [{unique: true, fields: ['email']}]
     }
   );
 
-  // Creates UserCommunities table
-  User.belongsToMany(Community, {
-    through: 'UserCommunity',
-    as: 'communities',
-    foreignKey: 'userId',
-    otherKey: 'communityId'
-  });
+  // @ts-ignore
+  User.associate = (models: any) => {
+    // Creates UserCommunities table
+    User.belongsToMany(models.Community, {
+      through: 'UserCommunity',
+      as: 'communities',
+      foreignKey: 'userId',
+      otherKey: 'communityId'
+    });
+  }
 
   return User;
 };
