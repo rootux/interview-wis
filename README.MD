@@ -6,16 +6,23 @@ Then the server would be up on http://localhost:3000
 
 ## Alternative local debug
 ```bash
+# Install NPM
+# (FOR MAC)
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+# OR (FOR WINDOWS) - navigate to https://github.com/coreybutler/nvm-windows/releases
+nvm use
 npm i -g nodemon
 npm i
 docker-compose up -d db
 npm run start:dev
 ```
 
-Dockerfile - uses multi-stage build - has dev and production envs
+## Testing
+Run `npm run test`
 
-hooks - allows any update to post / create to trigger an email if content is in watchlist_words
-(Optimizing watchlist_words can be done if we load this into memory)
+## More info
+`Dockerfile` - uses multi-stage build - has dev and production envs
+`hooks` - allows any update to post / create to trigger an email if content is in watchlist_words
 
 ## DB Schema
 ![Db Schema](docs/db_diagram.png)
