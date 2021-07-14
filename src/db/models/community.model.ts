@@ -34,13 +34,19 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
       },
       memberCount: {
         type: DataTypes.VIRTUAL,
-        get() {
-          return `TODO sql query for member count in related table`; // TODO
+        async get() {
+          const communityId = this.getDataValue('id')
+          const [results] = await sequelize.query(`
+          SELECT COUNT(community_id) FROM user_community where community_id=${communityId}
+          `);
+          // @ts-ignore
+          return results[0]['count'];
         },
       }
 
     }, {
-      freezeTableName: true
+      tableName: "community",
+      underscored: true,
     }
   );
 };

@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 const router = express.Router();
 
-const BASE_URL = '/community' // Posts are mapped under communities
+const BASE_URL = '/communities' // Posts are mapped under communities
 
 router.get(`${BASE_URL}/:communityId/posts`, function(req: Request, res: Response) {
   const communityId = req.params.communityId;

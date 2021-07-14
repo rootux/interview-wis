@@ -1,7 +1,6 @@
-import {User, UserInstance} from "../db/models/user.model"
+import {User} from "../db/models/user.model"
 import {Op} from "sequelize"
 import {Roles} from './user.roles.enum'
-import {ModelCtor} from "sequelize/types/lib/model";
 
 export default class UserService {
   private models:any

@@ -27,7 +27,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
     postId: {
        type: DataTypes.INTEGER,
        references: {
-         model: 'Community',
+         model: 'community',
          key: 'id'
        },
        allowNull: false
@@ -42,7 +42,8 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
        allowNull: false
      }
    }, {
-    freezeTableName: true
+    tableName: "ranking_by_reaction",
+    underscored: true,
   }
  );
 }

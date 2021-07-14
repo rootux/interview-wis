@@ -26,14 +26,14 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
     postId: {
       type: DataTypes.INTEGER,
       references: {
-        model: 'Post',
+        model: 'post',
         key: 'id'
       }
     },
     userId: {
       type: DataTypes.INTEGER,
       references: {
-        model: 'User',
+        model: 'user',
         key: 'id'
       }
     },
@@ -43,6 +43,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
       allowNull: false,
     }
   }, {
-    freezeTableName: true
+    tableName: "post_reaction",
+    underscored: true,
   });
 }

@@ -17,8 +17,6 @@ export default function handleErrorMiddleware (err:any, req: any, res: Response,
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  req.log.error(err.stack);
-
   res.status(status).json({
     errors: {
       message: err.message,

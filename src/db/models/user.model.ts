@@ -64,8 +64,9 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
       }
 
     }, {
+      tableName: "user",
+      underscored: true,
       indexes: [{unique: true, fields: ['email']}],
-      freezeTableName: true
     }
   );
 
@@ -73,7 +74,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
   User.associate = (models: any) => {
     // Creates UserCommunities table
     User.belongsToMany(models.Community, {
-      through: 'UserCommunity',
+      through: 'user_community',
       as: 'communities',
       foreignKey: 'userId',
       otherKey: 'communityId'

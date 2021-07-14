@@ -44,7 +44,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
     communityId: {
       type: DataTypes.INTEGER,
       references: {
-        model: 'Community',
+        model: 'community',
         key: 'id'
       },
       allowNull: false
@@ -56,19 +56,20 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
     userId: {
       type: DataTypes.INTEGER,
       references: {
-        model: 'User',
+        model: 'user',
         key: 'id'
       },
       allowNull: false
     },
     status: {
       type: DataTypes.ENUM,
-      values: ['pending', 'approved'],
-      defaultValue: 'pending',
+      values: [PostStatus.pending, PostStatus.approved],
+      defaultValue: PostStatus.pending,
       allowNull: false
     }
   }, {
-    freezeTableName: true
+    tableName: "post",
+    underscored: true,
   })
 
 

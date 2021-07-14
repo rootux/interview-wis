@@ -25,7 +25,8 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
       allowNull: false
     },
     }, {
-      freezeTableName: true
+      tableName: "watchlist",
+      underscored: true,
     }
   );
 };
