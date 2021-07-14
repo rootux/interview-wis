@@ -3,6 +3,8 @@ const path = require('path');
 const Sequelize = require('sequelize');
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
+import debug from 'debug';
+const logger = debug('wisdo:api');
 const config = require(__dirname + '/../db.config')[env];
 const db: any = {};
 
@@ -13,7 +15,7 @@ if (config.use_env_variable) {
   sequelize = new Sequelize(config.dbUrl, config);
 }
 
-console.log(`Loading models from ${__dirname}`);
+logger(`Loading models from ${__dirname}`);
 fs.readdirSync(__dirname)
   .filter((file: any) => {
     return (
@@ -24,7 +26,7 @@ fs.readdirSync(__dirname)
     db[model.name] = model;
   });
 
-console.log(`Loaded ${Object.keys(db).length} models`);
+logger(`Loaded ${Object.keys(db).length} models`);
 
 Object.keys(db).forEach((modelName) => {
   if (db[modelName].associate) {
@@ -35,7 +37,7 @@ Object.keys(db).forEach((modelName) => {
   }
 });
 
-console.log("DB Ready - Finished loading models");
+logger("DB Ready - Finished loading models");
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;

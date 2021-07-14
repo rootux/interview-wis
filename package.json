@@ -5,7 +5,7 @@
   "engines" : { "node" : ">=14.0.0" },
   "scripts": {
     "start": "ts-node src/bin/www.ts",
-    "start:dev": "nodemon -T src/bin/www.ts",
+    "start:dev": "cross-env DEBUG=wisdo:* nodemon -T src/bin/www.ts",
     "test": "run-p test:unit test:integration",
     "test:integration": "docker-compose up -d db-test && cross-env NODE_ENV=test jest --runInBand --verbose=false -c jest.config.js ./test/integration",
     "test:unit": "cross-env NODE_ENV=test jest -c jest.config.js ./test/unit",

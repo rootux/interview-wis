@@ -1,20 +1,21 @@
-import {Request, Response} from "express";
-import db from '../db/models/db.models';
+import {Response} from "express"
+import db from '../db/models/db.models'
+import {getFirstWords} from "../utils/utils.array"
 
 export class PostService {
-  static createPost = async ( req: Request, res: Response) => {
+  static createPost = async ( req: any, res: Response) => {
     // TODO - replace with some input validation framework
-    const communityId = req.params.communityId;
-    if (!req.body.post) throw new Error('No post data');
-    // TODO validate body length > 3
+    const communityId = req.params.communityId
+    const { userId } = req.auth
+    if (!req.body.body || req.body.body.length < 3) throw new Error('Post must have a body (Bigger then 3 chars)')
     // TODO SECURITY: validate that communityId is of type community id
-    let { title, summary, body } = req.body.post;
-    if(!summary) {
-      const NUMBER_OF_SUMMARY_WORDS = 100;
-      summary = body.split(' ').slice(NUMBER_OF_SUMMARY_WORDS).map((s: string) => s + " ");
-      summary.splice(-1,1); // remove the last ' '
+    let { title, summary, body } = req.body
+    if(!summary || summary == '') {
+      const NUMBER_OF_SUMMARY_WORDS = 100
+      summary = getFirstWords(body, NUMBER_OF_SUMMARY_WORDS)
     }
-    await db.Post.create({title, summary}); // TODO
-    return res.send('Created post');
+    const post = await db.Post.create({title, summary, userId, communityId})
+    return res.json({message: 'Created post', post})
+
   }
 }

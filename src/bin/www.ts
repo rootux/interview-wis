@@ -7,7 +7,7 @@
 
 import app from '../app';
 import debug from 'debug';
-debug('wisdo:server');
+const logger = debug('wisdo:api');
 import * as http from 'http';
 import { AddressInfo } from 'net';
 
@@ -89,5 +89,5 @@ function onListening() {
   const bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+  logger('Listening on ' + bind);
 }
