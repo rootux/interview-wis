@@ -1,25 +1,17 @@
-import express, { Request, Response, NextFunction } from 'express';
-import {PostService} from "./post.service";
+import express, { Request, Response } from 'express';
 const router = express.Router();
 
-router.get('/:communityId/posts', function(req: Request, res: Response) {
+const BASE_URL = '/community' // Posts are mapped under communities
+
+router.get(`${BASE_URL}/:communityId/posts`, function(req: Request, res: Response) {
   const communityId = req.params.communityId;
   res.send(`Posts for ${communityId}`);
 });
 
-router.post('/:communityId/posts', function(req: Request, res: Response) {
-  return PostService.createPost(req, res);
+router.post(`${BASE_URL}/:communityId/posts`, function(req: Request, res: Response) {
+  const {postService} = req.app.locals.services
+  return postService.createPost(req, res);
 });
 
 
 export default router;
-
-//POST (body, userId, communityId)
-//Community (id)
-//ordered_by //
-// POST //COMMUNITY
-// SELECT
-// JOIN user
-// UserCommunities UserId, CommunityId (Primary key on both)
-
-// SELECT * POSTS FROM USERS WHERE posts.communityId is in user.communities

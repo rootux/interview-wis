@@ -1,29 +1,34 @@
 import EmailService from '../email/email.service';
 import CacheService from "../cache/cache.service";
-import db from '../db/models/db.models';
+import UserService from "../user/user.service";
+import {WatchedWords} from "./watchlist.types";
+import WatchlistProvider from "./watchlist.provider";
 
 const WORDS_CACHE_TTL = 600; // 10 minutes
 
-class Words extends Set<string>{}
-
 export default class WatchlistService {
+  private emailService:EmailService;
+  private watchListProvider: WatchlistProvider;
+  private userService: UserService;
 
-  static async getWords(): Promise<Words> {
+  constructor(watchListProvider:WatchlistProvider, emailService:EmailService, userService: UserService) {
+    this.watchListProvider = watchListProvider
+    this.emailService = emailService
+    this.userService = userService
+  }
+
+  async getWords(): Promise<WatchedWords> {
     const key = 'WatchlistWords';
-    let words:Words = CacheService.get<Words>(key)
+    let words:WatchedWords = CacheService.get<WatchedWords>(key)
     if(!words) {
-      const wordsArray = (await db.Watchlist.findAll({
-        attributes: ['word'],
-        order: [['word', 'ASC']]}))
-        .map((obj:any) => obj.word.toLowerCase());
-      words = new Words(wordsArray);
-      CacheService.set<Words>(key, words, WORDS_CACHE_TTL);
+      const wordsSet = this.watchListProvider.getWords()
+      CacheService.set<WatchedWords>(key, words, WORDS_CACHE_TTL);
     }
     return words;
   }
 
-  static async isContentValid(content: string) {
-    const words:Words = await WatchlistService.getWords();
+  async isContentValid(content: string):Promise<boolean> {
+    const words:WatchedWords = await this.getWords();
     for(const word of content.split(' ')) {
       if(words.has(word.toLowerCase())) {
         return false;
@@ -32,12 +37,13 @@ export default class WatchlistService {
     return true;
   }
 
-  static validate = async (content:string, postUrl:string) => {
-    const isValid = await WatchlistService.isContentValid(content)
-    if(isValid) return isValid;
-    const emailParams = {to: ['johndoe@gmail.com'],subject: 'Post Trigger',body: `Post triggered a watchlist ${postUrl}`};
-    EmailService.sendEmail(emailParams);
+  validateAndAlert = async (content:string, postUrl:string):Promise<boolean> => {
+    const isValid = await this.isContentValid(content)
+    if(isValid) return isValid
+    const modsAndSuperMods = await this.userService.getModsAndSuperMods()
+    const emails = modsAndSuperMods.map((user:any) => user.email)
+    const emailParams = {to: emails, subject: 'Post Trigger',body: `Post triggered a watchlist ${postUrl}`};
+    await this.emailService.sendEmail(emailParams);
     return isValid;
-
   }
 }

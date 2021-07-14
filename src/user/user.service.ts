@@ -1,31 +1,31 @@
-import db from '../db/models/db.models'
-import {UserAttributes} from "../db/models/user.model"
+import {User, UserInstance} from "../db/models/user.model"
 import {Op} from "sequelize"
-import roles from '../user/user.roles.enum'
+import {Roles} from './user.roles.enum'
+import {ModelCtor} from "sequelize/types/lib/model";
 
 export default class UserService {
-  static create(userAttributes: UserAttributes) {
-    const { name, email, image, country } = userAttributes
-    return db.User.create({
-      name, email, image, country
-    })
+  private models:any
+
+  constructor(models:any) {
+    this.models = models
   }
 
-  static createWithRole(userAttributes: UserAttributes) {
-    const { name, email, image, country, role } = userAttributes
-    return db.User.create({
+  create(user: User) {
+    const { name, email, image, country, role }:User = user
+    return this.models.User.create({
       name, email, image, country, role
     })
   }
-  static getFeed(userId: string) {
+
+  getFeed(userId: string) {
     return `Feed for ${userId}`
   }
 
-  static getModeratorsAndSuperModerators() {
-    return db.User.findAll({
+  getModsAndSuperMods():[User] {
+    return this.models.User.findAll({
       where: {
         roles: {
-          [Op.in]: roles
+          [Op.in]: [Roles.Moderator, Roles.SuperModerator]
         }
       }
     })

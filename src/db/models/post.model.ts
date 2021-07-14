@@ -1,26 +1,22 @@
 import {Model, Optional, Sequelize} from "sequelize"
 import {getFirstWords} from "../../utils/utils.array";
+import {PostStatus} from "./postStatus.enum";
 
-enum PostStatus {
-  pending,
-  approved
-}
-
-interface PostAttributes {
+export interface Post {
   id?: number
   title: string
   summary?: string
   body: string
   communityId: string
-  length: number
+  length?: number
   userId: string
   status: PostStatus
 }
 
-interface PostCreationAttributes extends Optional<PostAttributes, 'id'> {}
+interface PostCreationAttributes extends Optional<Post, 'id'> {}
 
-interface PostInstance extends Model<PostAttributes, PostCreationAttributes>,
-    PostAttributes {
+export interface PostInstance extends Model<Post, PostCreationAttributes>,
+    Post {
   createdAt?: Date
   updatedAt?: Date
 }

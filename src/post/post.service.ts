@@ -1,9 +1,18 @@
 import {Response} from "express"
-import db from '../db/models/db.models'
 import {getFirstWords} from "../utils/utils.array"
+import WatchlistService from "../watchlist/watchlist.service";
+import config from "../config/config";
 
 export class PostService {
-  static createPost = async ( req: any, res: Response) => {
+  private watchListService:WatchlistService
+  private models: any;
+
+  constructor(watchListService:any, models:any) {
+    this.watchListService = watchListService
+    this.models = models
+  }
+
+  createPost = async ( req: any, res: Response) => {
     // TODO - replace with some input validation framework
     const communityId = req.params.communityId
     const { userId } = req.auth
@@ -14,7 +23,9 @@ export class PostService {
       const NUMBER_OF_SUMMARY_WORDS = 100
       summary = getFirstWords(body, NUMBER_OF_SUMMARY_WORDS)
     }
-    const post = await db.Post.create({title, summary, userId, communityId})
+    const post = await this.models.Post.create({title, body, summary, userId, communityId})
+    const postUrl = `${config.BACKEND_URL}/community/${communityId}/${post.id}`
+    await this.watchListService.validateAndAlert(body, postUrl)
     return res.json({message: 'Created post', post})
 
   }

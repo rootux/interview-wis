@@ -1,5 +1,8 @@
 class EmailService {
-  static sendEmail({to, subject, body}: { to: string[], subject: string, body: string }) {
+  constructor(models:any) {
+
+  }
+  sendEmail({to, subject, body}: { to: string[], subject: string, body: string }) {
     console.log("sendEmail called", {to, subject, body})
   }
 }

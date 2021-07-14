@@ -2,7 +2,7 @@ import countries from '../../user/user.countries.enum';
 import {Model, Optional, Sequelize} from "sequelize";
 import RolesValues,{Roles} from "../../user/user.roles.enum";
 
-export interface UserAttributes {
+export interface User {
   id?: number;
   name: string;
   email: string;
@@ -11,11 +11,11 @@ export interface UserAttributes {
   role?: Roles
 }
 
-interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
+interface UserCreationAttributes extends Optional<User, 'id'> {}
 
-interface UserInstance
-  extends Model<UserAttributes, UserCreationAttributes>,
-    UserAttributes {
+export interface UserInstance
+  extends Model<User, UserCreationAttributes>,
+    User {
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -58,7 +58,9 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
       },
       role: {
         type: DataTypes.ENUM,
-        values: RolesValues
+        values: RolesValues,
+        defaultValue: Roles.Normal,
+        allowNull: false,
       }
 
     }, {

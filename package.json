@@ -2,7 +2,9 @@
   "name": "wisdo",
   "version": "0.0.1",
   "private": true,
-  "engines" : { "node" : ">=14.0.0" },
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "scripts": {
     "start": "ts-node src/bin/www.ts",
     "start:dev": "cross-env DEBUG=wisdo:* nodemon -T src/bin/www.ts",
@@ -16,10 +18,12 @@
     "debug": "~2.6.9",
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
+    "lodash": "^4.17.21",
     "morgan": "~1.9.1",
     "node-cache": "^5.1.2",
     "pg": "^8.6.0",
     "reflect-metadata": "^0.1.13",
+    "require-directory": "^2.1.1",
     "sequelize": "^6.6.5",
     "sequelize-typescript": "^2.1.0"
   },
@@ -32,6 +36,7 @@
     "@types/jest": "^26.0.24",
     "@types/morgan": "^1.9.3",
     "@types/node": "^16.0.0",
+    "@types/require-directory": "^2.1.2",
     "@types/sinon": "^10.0.2",
     "@types/supertest": "^2.0.11",
     "@types/validator": "^13.6.3",

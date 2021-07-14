@@ -1,6 +1,6 @@
 import * as faker from 'faker';
 import db from '../../../src/db/models/db.models';
-import {createMockCommunity, createMockUser} from "../../../src/utils/utils.mock";
+import {createMockCommunity, createMockUser} from "../../../src/mock/mock.service";
 
 describe('Post model', () => {
   let thisDb: any = db
