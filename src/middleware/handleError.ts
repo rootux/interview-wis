@@ -21,6 +21,7 @@ export default function handleErrorMiddleware (err:any, req: any, res: Response,
     errors: {
       message: err.message,
       error: err,
+      stack: err.stack
     },
   });
 };

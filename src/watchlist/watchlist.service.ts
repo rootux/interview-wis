@@ -21,8 +21,8 @@ export default class WatchlistService {
     const key = 'WatchlistWords';
     let words:WatchedWords = CacheService.get<WatchedWords>(key)
     if(!words) {
-      const wordsSet = this.watchListProvider.getWords()
-      CacheService.set<WatchedWords>(key, words, WORDS_CACHE_TTL);
+      const wordsSet = await this.watchListProvider.getWords()
+      CacheService.set<WatchedWords>(key, wordsSet, WORDS_CACHE_TTL);
     }
     return words;
   }

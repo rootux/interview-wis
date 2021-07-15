@@ -9,7 +9,6 @@ import indexRoutes from "../routes/index.routes"
 import userRoutes from "../user/user.routes"
 import communityRoutes from "../community/community.routes"
 import postRoutes from "../post/post.routes"
-const requireDirectory = require('require-directory')
 
 module.exports = (app:any) => {
   app.use(logger('dev'))
