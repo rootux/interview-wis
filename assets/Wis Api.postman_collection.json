@@ -62,18 +62,27 @@
 							}
 						},
 						"url": {
-							"raw": "{{HOST}}/users",
+							"raw": "{{HOST}}/users/feed?limit=30&page=0",
 							"host": [
 								"{{HOST}}"
 							],
 							"path": [
-								"users"
+								"users",
+								"feed"
 							],
 							"query": [
 								{
 									"key": "name",
 									"value": "asdfasdf",
 									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "30"
+								},
+								{
+									"key": "page",
+									"value": "0"
 								}
 							]
 						}
@@ -249,7 +258,7 @@
 									"urlencoded": []
 								},
 								"url": {
-									"raw": "{{HOST}}/communities/1/posts/11?mod=supermod",
+									"raw": "{{HOST}}/communities/1/posts/4?mod=supermod",
 									"host": [
 										"{{HOST}}"
 									],
@@ -257,7 +266,7 @@
 										"communities",
 										"1",
 										"posts",
-										"11"
+										"4"
 									],
 									"query": [
 										{
@@ -279,7 +288,7 @@
 									"urlencoded": []
 								},
 								"url": {
-									"raw": "{{HOST}}/communities/1/posts/11/approve?mod=supermod",
+									"raw": "{{HOST}}/communities/1/posts/2/approve?mod=supermod",
 									"host": [
 										"{{HOST}}"
 									],
@@ -287,7 +296,7 @@
 										"communities",
 										"1",
 										"posts",
-										"11",
+										"2",
 										"approve"
 									],
 									"query": [
