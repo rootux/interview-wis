@@ -74,9 +74,11 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
 
 
   Post.registerHooks = () => {
-    Post.addHook('beforeValidate', (post:any) => {
+    Post.addHook('beforeValidate', (post:any, opts:any) => {
+      // If we are not updating the body - for example if we update the post status - skip this
+      if(!opts.fields.includes("body")) { return }
       post.dataValues.length = post.dataValues.body.length
-      if(!post.dataValues.summary) {
+      if (!post.dataValues.summary) {
         post.dataValues.summary = getFirstWords(post.dataValues.body, 100)
       }
     })

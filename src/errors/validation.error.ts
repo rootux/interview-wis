@@ -1,9 +1,9 @@
 import WisdoApiError from "./wisedoApi.error"
 
 export default class ValidationError extends WisdoApiError {
-  private field: string
+  private field: string|number
   private status: number
-  constructor(field:string, message?:string) {
+  constructor(field:string|number, message?:string) {
     if(!message) {
       message = `Invalid ${field} received`
     }

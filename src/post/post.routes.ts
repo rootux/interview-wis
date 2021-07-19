@@ -1,10 +1,11 @@
-import express, { Request, Response } from 'express';
+import express, { Response } from 'express';
 import CommunityValidator from "../community/community.validator";
 import { body } from 'express-validator';
 import {PostService} from "./post.service";
 import {Roles} from "../user/user.roles.enum";
 import CommunityService from "../community/community.service";
 import ValidationError from "../errors/validation.error";
+import AuthError from "../errors/auth.error";
 const router = express.Router();
 
 const BASE_URL = '/communities' // Posts are mapped under communities
@@ -14,7 +15,7 @@ router.get(`${BASE_URL}/:communityId/posts`, async (req: any, res: Response) => 
   await CommunityValidator(req)
   const {postService}:{postService:PostService} = req.app.locals.services
   let options = {includeAllStatus: false}
-  if(req.auth.role == Roles.Moderator || req.auth.role == Roles.SuperModerator) {
+  if(req.auth.isMod()) {
     options = {includeAllStatus: true}
   }
   const posts = await postService.list(communityId, options)
@@ -37,6 +38,35 @@ router.post(
     const post = await postService.createPost(userId, communityId, title, body, summary)
     res.json(post)
 });
+
+router.get(
+  `${BASE_URL}/:communityId/posts/:postId`,
+  async (req: any, res: Response) => {
+    const {communityId, postId} = req.params
+    const {postService}:{postService:PostService} = req.app.locals.services
+    let options = {includeAllStatus: false}
+    if(req.auth.isMod()) {
+      options = {includeAllStatus: true}
+    }
+    const post = await postService.find(communityId, postId, options)
+    if(!post) {
+      throw new ValidationError(postId, "Cant find post or no permission to view this post")
+    }
+    res.json(post)
+  })
+
+router.post(
+  `${BASE_URL}/:communityId/posts/:postId/approve`,
+  async (req: any, res: Response) => {
+    // TODO create a validator like body() for auth request
+    if(!req.auth.isMod()) {
+      throw new AuthError()
+    }
+    const {communityId, postId} = req.params
+    const {postService}:{postService:PostService} = req.app.locals.services
+    const post = await postService.approve(communityId, postId)
+    res.json(post)
+  })
 
 
 export default router;
