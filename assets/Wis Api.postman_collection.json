@@ -166,7 +166,108 @@
 			"name": "Posts",
 			"item": [
 				{
-					"name": "Get posts",
+					"name": "Mods",
+					"item": [
+						{
+							"name": "List (As super mod)",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": []
+								},
+								"url": {
+									"raw": "{{HOST}}/communities/1/posts?mod=supermod",
+									"host": [
+										"{{HOST}}"
+									],
+									"path": [
+										"communities",
+										"1",
+										"posts"
+									],
+									"query": [
+										{
+											"key": "mod",
+											"value": "supermod"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get (As super mod)",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": []
+								},
+								"url": {
+									"raw": "{{HOST}}/communities/1/posts/11?mod=supermod",
+									"host": [
+										"{{HOST}}"
+									],
+									"path": [
+										"communities",
+										"1",
+										"posts",
+										"11"
+									],
+									"query": [
+										{
+											"key": "mod",
+											"value": "supermod"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Approve (As super mod)",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": []
+								},
+								"url": {
+									"raw": "{{HOST}}/communities/1/posts/11/approve?mod=supermod",
+									"host": [
+										"{{HOST}}"
+									],
+									"path": [
+										"communities",
+										"1",
+										"posts",
+										"11",
+										"approve"
+									],
+									"query": [
+										{
+											"key": "mod",
+											"value": "supermod"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "List",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -185,7 +286,7 @@
 					"response": []
 				},
 				{
-					"name": "Create Post",
+					"name": "Create",
 					"event": [
 						{
 							"listen": "test",
@@ -233,6 +334,26 @@
 									"value": null,
 									"disabled": true
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{HOST}}/communities/1/posts/1",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"communities",
+								"1",
+								"posts",
+								"1"
 							]
 						}
 					},
