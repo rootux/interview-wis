@@ -1,6 +1,7 @@
 import countries from '../../user/user.countries.enum';
 import {Model, Optional, Sequelize} from "sequelize";
 import RolesValues,{Roles} from "../../user/user.roles.enum";
+import {Community} from "./community.model";
 
 export interface User {
   id: number;
@@ -9,6 +10,10 @@ export interface User {
   image: string;
   country: number;
   role: Roles
+}
+
+export interface UserWithCommunities extends User {
+  communities: Community[]
 }
 
 export interface UserCreation extends Optional<User, 'id'> {}

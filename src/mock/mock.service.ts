@@ -1,4 +1,4 @@
-import {User, UserInstance} from "../db/models/user.model";
+import {User, UserInstance, UserWithCommunities} from "../db/models/user.model";
 
 const faker = require('faker');
 import {ModelCtor} from 'sequelize/types/lib/model';
@@ -61,16 +61,22 @@ export default class MockService {
     }
   }
 
-  // TODO: replace with mockPosts that receive an array and use bulkCreate
-  async createMockPost(user: any, communityId: any):Promise<Post> {
-    return this.models.Post.create({
-      title: faker.name.findName(),
-      summary: faker.lorem.word(),
-      body: faker.lorem.word(),
-      status: PostStatus.pending,
-      communityId: communityId,
-      userId: user.id
-    });
+  async createMockPosts(users: UserWithCommunities[], count: number):Promise<Post[]> {
+    const objects = []
+    for(let i of Array(count)) {
+      const user = sampleRandom(users)
+      const userCommunities = user.communities
+      const communityId = sampleRandom(userCommunities).id
+      objects.push({
+        title: faker.name.findName(),
+        summary: faker.lorem.word(),
+        body: faker.lorem.words(15),
+        status: PostStatus.pending,
+        communityId,
+        userId: user.id
+      })
+    }
+    return this.models.Post.bulkCreate(objects)
   }
 
   async createMockWords(words:string[]) {

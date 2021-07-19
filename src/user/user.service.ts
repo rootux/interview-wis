@@ -1,9 +1,10 @@
-import {User, UserCreation} from "../db/models/user.model"
+import {User, UserCreation, UserInstance} from "../db/models/user.model"
 import {Op} from "sequelize"
 import {Roles} from './user.roles.enum'
+import {ModelCtor} from "sequelize/types/lib/model";
 
 export default class UserService {
-  private models: { User: any }
+  private models: { User: ModelCtor<UserInstance> }
 
   constructor(models: any) {
     this.models = models
@@ -24,7 +25,7 @@ export default class UserService {
     return `Feed for ${userId}`
   }
 
-  getModsAndSuperMods():[User] {
+  getModsAndSuperMods():Promise<User[]> {
     return this.models.User.findAll({
       where: {
         role: {
