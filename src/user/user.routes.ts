@@ -29,8 +29,7 @@ router.post(`${BASE_URL}/`,
   async (req: Request, res: Response) => {
     const {name, email, image, country} = req.body
     const {userService}:{userService:UserService} = req.app.locals.services
-    const cleanedReq = {name, email, image, country, role: Roles.Normal}
-    const user = await userService.create(cleanedReq)
+    const user = await userService.create({name, email, image, country, role: Roles.Normal})
     res.send(user)
   })
 

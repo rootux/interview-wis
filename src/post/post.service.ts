@@ -2,7 +2,7 @@ import WatchlistService from "../watchlist/watchlist.service";
 import config from "../config/config";
 import {PostStatus} from "../db/models/postStatus.enum";
 import ValidationError from "../errors/validation.error";
-import debug from "debug";
+import {Post, PostCreation} from "../db/models/post.model";
 
 export class PostService {
   private watchlistService: WatchlistService
@@ -35,11 +35,11 @@ export class PostService {
     return this.models.Post.findAll({where})
   }
 
-  createPost = async ( userId:string, communityId: number, title:string, body:string, summary:any) => {
-    const post = await this.models.Post.create({title, body, summary, userId, communityId})
-    const postUrl = `${config.BACKEND_URL}/communities/${communityId}/${post.id}`
-    await this.watchlistService.validateAndAlert(body, postUrl)
-    return post
+  createPost = async (post: PostCreation):Promise<Post> => {
+    const result = await this.models.Post.create(post)
+    const postUrl = `${config.BACKEND_URL}/communities/${post.communityId}/${post.id}`
+    await this.watchlistService.validateAndAlert(post.body, postUrl)
+    return result
   }
 
   approve = async (communityId: number, postId: number) => {

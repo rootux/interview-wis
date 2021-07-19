@@ -18,6 +18,10 @@ export default class WatchlistService {
     this.userService = userService
   }
 
+  async unused() {
+
+  }
+
   async getWords(): Promise<WatchedWords> {
     const key = 'WatchlistWords';
     let words:WatchedWords = CacheService.get<WatchedWords>(key)

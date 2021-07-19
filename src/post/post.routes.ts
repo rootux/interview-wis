@@ -6,6 +6,7 @@ import CommunityService from "../community/community.service";
 import ValidationError from "../errors/validation.error";
 import AuthError from "../errors/auth.error";
 import validator from "../routes/validator.middleware";
+import {PostCreation} from "../db/models/post.model";
 const router = express.Router();
 
 const BASE_URL = '/communities' // Posts are mapped under communities
@@ -36,8 +37,8 @@ router.post(
     let { title, summary, body } = req.body
     const isUserInCommunity = await communityService.isUserInCommunity(userId, communityId)
     if(!isUserInCommunity) { throw new ValidationError(communityId, 'User does not belong to this community')}
-    const post = await postService.createPost(userId, communityId, title, body, summary)
-    res.json(post)
+    const result = await postService.createPost({userId, communityId, title, body, summary})
+    res.json(result)
 });
 
 router.get(

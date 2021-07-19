@@ -7,17 +7,17 @@ export interface Post {
   title: string
   summary: string
   body: string
-  communityId: string
+  communityId: number
   length: number
   likes: number
-  userId: string
+  userId: number
   status: PostStatus
 }
 
-type OPTIONAL_CREATION_PARAMS = 'id' | 'summary' | 'length' | 'likes'
-interface PostCreationAttributes extends Optional<Post, OPTIONAL_CREATION_PARAMS> {}
+type OPTIONAL_CREATION_PARAMS = 'id' | 'summary' | 'length' | 'likes' | 'status'
+export interface PostCreation extends Optional<Post, OPTIONAL_CREATION_PARAMS> {}
 
-export interface PostInstance extends Model<Post, PostCreationAttributes>,
+export interface PostInstance extends Model<Post, PostCreation>,
     Post {
   createdAt?: Date
   updatedAt?: Date

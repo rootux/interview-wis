@@ -23,9 +23,9 @@ describe("test the User Service", () => {
       role: Roles.Normal
     }
     const user = await userService.create(userMock)
-    expect(user.email).toMatch(userMock.email)
-    expect(user.name).toMatch(userMock.name)
-    expect(user.image).toMatch(userMock.image)
+    expect(user.email).toEqual(userMock.email)
+    expect(user.name).toEqual(userMock.name)
+    expect(user.image).toEqual(userMock.image)
     expect(user.country).toEqual(userMock.country)
   })
 
@@ -38,7 +38,7 @@ describe("test the User Service", () => {
       role: Roles.Moderator
     }
     const user = await userService.create(userMock)
-    expect(user.role).toMatch(Roles.Moderator)
+    expect(user.role).toEqual(Roles.Moderator)
 
     const userSuperModMock:UserCreation = {
       ...userMock,
@@ -46,7 +46,7 @@ describe("test the User Service", () => {
       role: Roles.SuperModerator
     }
     const userSuperMod = await userService.create(userSuperModMock)
-    expect(userSuperMod.role).toMatch(Roles.SuperModerator)
+    expect(userSuperMod.role).toEqual(Roles.SuperModerator)
 
   })
 
