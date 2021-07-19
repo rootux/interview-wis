@@ -2,10 +2,7 @@ import {ModelCtor} from "sequelize/types/lib/model";
 import {UserInstance} from "../db/models/user.model";
 import {Sequelize} from "sequelize";
 import {UserCommunityInstance} from "../db/models/userCommunity.model";
-import debug from "debug";
 import ValidationError from "../errors/validation.error";
-
-const logger = debug('wisdo:api');
 
 export default class CommunityService {
   private models:{Community:any, User: ModelCtor<UserInstance>, UserCommunity:ModelCtor<UserCommunityInstance>}
@@ -43,6 +40,12 @@ export default class CommunityService {
     });
 
     return {message: 'Success'}
+  }
+
+  async isUserInCommunity(userId:number, communityId: number):Promise<boolean> {
+    const userCommunity = await this.models.UserCommunity.findOne({where: { userId, communityId }
+    })
+    return !!userCommunity;
   }
 
 }
