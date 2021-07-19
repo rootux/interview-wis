@@ -6,7 +6,7 @@ export default function AuthMiddleware(req: any, res: Response | {}, next: NextF
   // This validation is to test cases for mod users vs normal user -
   // in production - this would be extracted from the logged in user\
   let role = Roles.Normal
-  if(req.query.mod == 'supermod') {
+  if(req.query?.mod == 'supermod') {
     role = Roles.SuperModerator
   }
   req.auth = { userId: "1", role, isMod: ()=> role == Roles.SuperModerator || role == Roles.Moderator}

@@ -3,6 +3,7 @@ import CacheService from "../cache/cache.service";
 import UserService from "../user/user.service";
 import {WatchedWords} from "./watchlist.types";
 import WatchlistProvider from "./watchlist.provider";
+import config from "../config/config";
 
 const WORDS_CACHE_TTL = 600; // 10 minutes
 
@@ -42,7 +43,9 @@ export default class WatchlistService {
     if(isValid) return isValid
     const modsAndSuperMods = await this.userService.getModsAndSuperMods()
     const emails = modsAndSuperMods.map((user:any) => user.email)
-    const emailParams = {to: emails, subject: 'Post Trigger',body: `Post triggered a watchlist ${postUrl}`};
+    const emailParams = {to: emails,
+      subject: config.TRIGGER_TITLE,
+      body: `${config.TRIGGER_BODY} ${postUrl}`};
     await this.emailService.sendEmail(emailParams);
     return isValid;
   }
