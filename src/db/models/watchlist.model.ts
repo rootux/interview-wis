@@ -7,7 +7,7 @@ interface WatchlistAttributes {
 
 interface Watchlist extends Optional<WatchlistAttributes, 'id'> {}
 
-interface WatchlistInstance extends Model<WatchlistAttributes, Watchlist>,
+export interface WatchlistInstance extends Model<WatchlistAttributes, Watchlist>,
   WatchlistAttributes {
   createdAt?: Date;
   updatedAt?: Date;

@@ -4,7 +4,9 @@ import app from '../app';
 
 import {Sequelize} from "sequelize";
 import MockService from "../mock/mock.service";
+import debug from "debug";
 
+const logger = debug('wisdo:api:seed');
 const createFakePost = async (mockService:MockService, users: any[]) => {
   const user = sampleRandom(users);
   const communities = await user.getCommunities();
@@ -13,16 +15,22 @@ const createFakePost = async (mockService:MockService, users: any[]) => {
 }
 
 (async () => {
-  console.log('Syncing database...');
+  logger('Syncing database...');
   let db:{sequelize:Sequelize} = app.locals.db
   let {mockService}:{mockService:MockService} = app.locals.services
 
   await db.sequelize.sync({force: true}); // This would drop old data // TODO: given more time we should use sequalize migrations and seed
-  console.log('Seeding database...');
-  // TODO: Promise.all
+  logger('Seeding database...');
+  // TODO: replace with bulkCreate
   const users = [];
   for(let i=0;i<10;i++) {
     users.push(await mockService.createMockUser());
+  }
+  for(let i=0;i<2;i++) {
+    users.push(await mockService.createMockModUser());
+  }
+  for(let i=0;i<2;i++) {
+    users.push(await mockService.createMockSuperModUser());
   }
   const communities = [];
   for(let i=0;i<10;i++) {
@@ -33,5 +41,7 @@ const createFakePost = async (mockService:MockService, users: any[]) => {
     await createFakePost(mockService, users);
   }
 
-  console.log('Done');
+  await mockService.createMockWords(['alert', 'problem', 'mandalorian'])
+
+  logger('Done');
 })();

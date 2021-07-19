@@ -27,7 +27,7 @@ export default class UserService {
   getModsAndSuperMods():[User] {
     return this.models.User.findAll({
       where: {
-        roles: {
+        role: {
           [Op.in]: [Roles.Moderator, Roles.SuperModerator]
         }
       }
