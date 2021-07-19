@@ -3,10 +3,14 @@ import {Op} from "sequelize"
 import {Roles} from './user.roles.enum'
 
 export default class UserService {
-  private models:any
+  private models: { User: any }
 
-  constructor(models:any) {
+  constructor(models: any) {
     this.models = models
+  }
+
+  find(userId: any) {
+    return this.models.User.findByPk(userId, {include: 'communities'})
   }
 
   create(user: User) {
