@@ -1,4 +1,4 @@
-export default [
+const countries = [
   "Afghanistan",
   "Albania",
   "Algeria",
@@ -249,3 +249,9 @@ export default [
   "Zimbabwe",
   "Åland Islands",
 ]
+
+export function getCountry(country:any) {
+  return countries.findIndex((c) => c === country);
+}
+
+export default countries

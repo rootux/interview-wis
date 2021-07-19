@@ -1,16 +1,17 @@
 import {Sequelize, Model, Optional} from "sequelize";
 
 export interface Community {
-  id?: number;
+  id: number;
   title: string;
   image: string;
-  memberCount?: number;
+  memberCount: number;
 }
 
-interface CommunityCreationAttributes extends Optional<Community, 'id'> {}
+type OPTIONAL_CREATION_PARAMS = 'id' | 'memberCount'
+export interface CommunityCreation extends Optional<Community, OPTIONAL_CREATION_PARAMS> {}
 
 export interface CommunityInstance
-  extends Model<Community, CommunityCreationAttributes>,
+  extends Model<Community, CommunityCreation>,
     Community {
   createdAt?: Date;
   updatedAt?: Date;

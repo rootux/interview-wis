@@ -3,7 +3,7 @@
 ```bash
 npm run docker:startd
 # Then, Seed the database with data
-npm run docker:seed 
+npm run docker:seed
 # Then to see logs you can run
 npm run docker:start
 ```
@@ -36,6 +36,8 @@ Run `npm run test`
 ## DB Schema
 ![Db Schema](docs/db_diagram.png)
 
+## Workers
+Assume `npm run update-feed` would run every 3 hours and would repopulate `RankByReaction` and `RankByLength` tables
 
 ## Comments
 1. This is my first production like Typescript project. I may error on the side of types and where to put declarations -

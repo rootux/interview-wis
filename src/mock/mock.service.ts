@@ -8,6 +8,7 @@ import {Post, PostInstance} from "../db/models/post.model";
 import {PostStatus} from "../db/models/postStatus.enum";
 import {Roles} from "../user/user.roles.enum";
 import {WatchlistInstance} from "../db/models/watchlist.model";
+import {getCountry} from "../user/user.countries.enum";
 const countries = require('../user/user.countries.enum').default;
 
 export default class MockService {
@@ -25,7 +26,7 @@ export default class MockService {
   _createMockUser(role: Roles):Promise<User> {
     return this.models.User.create({
       name: faker.name.findName(),
-      country: sampleRandom(countries),
+      country: getCountry(sampleRandom(countries)),
       email: faker.internet.email(),
       image: faker.image.people(),
       role

@@ -3,17 +3,19 @@ import {getFirstWords} from "../../utils/utils.array";
 import {PostStatus} from "./postStatus.enum";
 
 export interface Post {
-  id?: number
+  id: number
   title: string
-  summary?: string
+  summary: string
   body: string
   communityId: string
-  length?: number
+  length: number
+  likes: number
   userId: string
   status: PostStatus
 }
 
-interface PostCreationAttributes extends Optional<Post, 'id'> {}
+type OPTIONAL_CREATION_PARAMS = 'id' | 'summary' | 'length' | 'likes'
+interface PostCreationAttributes extends Optional<Post, OPTIONAL_CREATION_PARAMS> {}
 
 export interface PostInstance extends Model<Post, PostCreationAttributes>,
     Post {
@@ -66,6 +68,11 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
       values: [PostStatus.pending, PostStatus.approved],
       defaultValue: PostStatus.pending,
       allowNull: false
+    },
+    likes: {
+      type: DataTypes.BIGINT,
+      allowNull: false,
+      defaultValue: 0,
     }
   }, {
     tableName: "post",

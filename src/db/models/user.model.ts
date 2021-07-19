@@ -3,18 +3,18 @@ import {Model, Optional, Sequelize} from "sequelize";
 import RolesValues,{Roles} from "../../user/user.roles.enum";
 
 export interface User {
-  id?: number;
+  id: number;
   name: string;
   email: string;
   image: string;
-  country: string;
+  country: number;
   role: Roles
 }
 
-interface UserCreationAttributes extends Optional<User, 'id'> {}
+export interface UserCreation extends Optional<User, 'id'> {}
 
 export interface UserInstance
-  extends Model<User, UserCreationAttributes>,
+  extends Model<User, UserCreation>,
     User {
   createdAt?: Date;
   updatedAt?: Date;
@@ -52,7 +52,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
         type: DataTypes.STRING(2083),
       },
       country: {
-        type: DataTypes.ENUM,
+        type: DataTypes.INTEGER,
         values: countries,
         allowNull: false
       },

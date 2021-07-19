@@ -1,4 +1,4 @@
-import {User} from "../db/models/user.model"
+import {User, UserCreation} from "../db/models/user.model"
 import {Op} from "sequelize"
 import {Roles} from './user.roles.enum'
 
@@ -13,8 +13,8 @@ export default class UserService {
     return this.models.User.findByPk(userId, {include: 'communities'})
   }
 
-  create(user: User) {
-    const { name, email, image, country, role }:User = user
+  create(user: UserCreation) {
+    const { name, email, image, country, role }:UserCreation = user
     return this.models.User.create({
       name, email, image, country, role
     })

@@ -2,7 +2,8 @@ import UserService from "../../src/user/user.service"
 import app from '../../src/app'
 import * as faker from "faker"
 import {Roles} from "../../src/user/user.roles.enum";
-import {User} from "../../src/db/models/user.model";
+import {UserCreation} from "../../src/db/models/user.model";
+import {getCountry} from '../../src/user/user.countries.enum';
 
 describe("test the User Service", () => {
   let thisDb: any = app.locals.db
@@ -14,10 +15,10 @@ describe("test the User Service", () => {
   })
 
   it("should create a user", async () => {
-    const userMock:User = {
+    const userMock:UserCreation = {
       email: 'johndoe@gmail.com',
       name: 'john',
-      country: 'Israel',
+      country: getCountry('Israel'),
       image: faker.image.people(),
       role: Roles.Normal
     }
@@ -25,21 +26,21 @@ describe("test the User Service", () => {
     expect(user.email).toMatch(userMock.email)
     expect(user.name).toMatch(userMock.name)
     expect(user.image).toMatch(userMock.image)
-    expect(user.country).toMatch(userMock.country)
+    expect(user.country).toEqual(userMock.country)
   })
 
   it("should create a moderator and super moderator", async () => {
-    const userMock:User = {
+    const userMock:UserCreation = {
       email: 'mod@gmail.com',
       name: 'mod',
-      country: 'Israel',
+      country: getCountry('Israel'),
       image: faker.image.people(),
       role: Roles.Moderator
     }
     const user = await userService.create(userMock)
     expect(user.role).toMatch(Roles.Moderator)
 
-    const userSuperModMock:User = {
+    const userSuperModMock:UserCreation = {
       ...userMock,
       email: 'supermod@gmail.com',
       role: Roles.SuperModerator
