@@ -25,27 +25,28 @@ router.post(`${BASE_URL}/`,
   body('image').isURL(),
   body('country').isIn(countries),
   validator,
+
   async (req: Request, res: Response) => {
-  const {name, email, image, country} = req.body
-  const {userService}:{userService:UserService} = req.app.locals.services
-  const cleanedReq = {name, email, image, country, role: Roles.Normal}
-  const user = await userService.create(cleanedReq)
-  res.send(user)
-})
+    const {name, email, image, country} = req.body
+    const {userService}:{userService:UserService} = req.app.locals.services
+    const cleanedReq = {name, email, image, country, role: Roles.Normal}
+    const user = await userService.create(cleanedReq)
+    res.send(user)
+  })
 
 router.get(`${BASE_URL}/feed`,
-  query('limit').isInt({min:0, max:1000}).default(config.DEFAULT_FEED_ITEMS),
-  query('page').isInt({min:0, max:100000}).default(0),
-  validator,
-  async (req: any, res: Response) => {
+  [query('limit').isInt({min:0, max:1000}),
+  query('page').isInt({min:0, max:100000}),
+  validator],
 
-  const { userId } = req.auth!
-  const { limit, page } = req.query
-  const offset = parseInt(page, 10) * limit
-  const limitSanitized = parseInt(limit, 10)
-  const {feedService}:{feedService:FeedService} = req.app.locals.services
-  const userFeed = await feedService.getFeed(userId, limitSanitized, offset)
-  res.send(userFeed)
-})
+  async (req: any, res: Response) => {
+    const { userId } = req.auth!
+    const { limit=config.DEFAULT_FEED_ITEMS, page=0 } = req.query
+    const offset = parseInt(page, 10) * limit
+    const limitSanitized = parseInt(limit, 10)
+    const {feedService}:{feedService:FeedService} = req.app.locals.services
+    const userFeed = await feedService.getFeed(userId, limitSanitized, offset)
+    res.send(userFeed)
+  })
 
 export default router
