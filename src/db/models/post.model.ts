@@ -1,6 +1,6 @@
 import {Model, Optional, Sequelize} from "sequelize"
-import {getFirstWords} from "../../utils/utils.array";
-import {PostStatus} from "./postStatus.enum";
+import {getFirstWords} from "../../utils/utils.array"
+import {PostStatus} from "./postStatus.enum"
 
 export interface Post {
   id: number
@@ -79,14 +79,24 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
     underscored: true,
   })
 
+  const addMissingData = (post:any) => {
+    post.dataValues.length = post.dataValues.body.length
+    if (!post.dataValues.summary) {
+      post.dataValues.summary = getFirstWords(post.dataValues.body, 100)
+    }
+  }
 
   Post.registerHooks = () => {
-    Post.addHook('beforeValidate', (post:any, opts:any) => {
+    Post.addHook('beforeValidate', (post:any, options:any) => {
       // If we are not updating the body - for example if we update the post status - skip this
-      if(!opts.fields.includes("body")) { return }
-      post.dataValues.length = post.dataValues.body.length
-      if (!post.dataValues.summary) {
-        post.dataValues.summary = getFirstWords(post.dataValues.body, 100)
+      if (!options.fields.includes("body")) return
+      addMissingData(post)
+    })
+    // Bulk create doesn't emit the individual beforeValidate hook
+    Post.addHook('beforeBulkCreate', (posts:any[], options:any) => {
+      if (!options.fields.includes("body")) return
+      for (const post of posts) {
+        addMissingData(post)
       }
     })
   }

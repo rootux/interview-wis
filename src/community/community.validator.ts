@@ -2,6 +2,7 @@ import ValidationError from "../errors/validation.error";
 import {Request} from "express";
 import CommunityService from "./community.service";
 
+// TODO: replace with express-validator
 export default async (req:Request) => {
   const { communityId } = req.params
   if(isNaN(parseInt(communityId))) {

@@ -7,8 +7,7 @@ const BASE_URL = '/communities';
 
 router.get(`${BASE_URL}/`, async (req: Request, res: Response) => {
   const {communityService}:{communityService:CommunityService} = req.app.locals.services
-
-  const communities:[any] = await communityService.list()
+  const communities = await communityService.list()
   res.send(communities);
 });
 

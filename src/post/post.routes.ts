@@ -1,11 +1,11 @@
 import express, { Response } from 'express';
 import CommunityValidator from "../community/community.validator";
-import { body } from 'express-validator';
+import {body, validationResult} from 'express-validator';
 import {PostService} from "./post.service";
-import {Roles} from "../user/user.roles.enum";
 import CommunityService from "../community/community.service";
 import ValidationError from "../errors/validation.error";
 import AuthError from "../errors/auth.error";
+import validator from "../routes/validator.middleware";
 const router = express.Router();
 
 const BASE_URL = '/communities' // Posts are mapped under communities
@@ -26,6 +26,7 @@ router.post(
   `${BASE_URL}/:communityId/posts`,
   body('body').isLength({min: 2}),
   body('title').isLength({min: 3}),
+  validator,
   async (req: any, res: Response) => {
     const {postService}:{postService:PostService} = req.app.locals.services
     const {communityService}:{communityService:CommunityService} = req.app.locals.services

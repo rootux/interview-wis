@@ -21,10 +21,6 @@ export default class UserService {
     })
   }
 
-  getFeed(userId: string) {
-    return `Feed for ${userId}`
-  }
-
   getModsAndSuperMods():Promise<User[]> {
     return this.models.User.findAll({
       where: {

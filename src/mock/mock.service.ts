@@ -52,7 +52,7 @@ export default class MockService {
     });
   }
 
-  async associateUsersToRandomCommunities(users: any[], communities: any[], communitiesPerUser: number) {
+  async associateUsersToRandomCommunities(users: any[], communities: Community[], communitiesPerUser: number) {
     for (const user of users) {
       for (let i = 0; i < communitiesPerUser; i++) {
         const community = sampleRandom(communities);
@@ -68,8 +68,8 @@ export default class MockService {
       const userCommunities = user.communities
       const communityId = sampleRandom(userCommunities).id
       objects.push({
-        title: faker.name.findName(),
-        summary: faker.lorem.word(),
+        title: faker.lorem.words(2),
+        summary: faker.lorem.words(4),
         body: faker.lorem.words(15),
         status: PostStatus.pending,
         communityId,

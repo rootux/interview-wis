@@ -1,6 +1,5 @@
 import { NextFunction, Response } from "express"
 import {Roles} from "../user/user.roles.enum";
-import debug from "debug";
 
 export default function AuthMiddleware(req: any, res: Response | {}, next: NextFunction) {
   // Dummy user id mock

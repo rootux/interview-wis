@@ -17,8 +17,8 @@ describe('Post model', () => {
     const community = await mockService.createMockCommunity();
     const body = faker.lorem.paragraph();
     const post = await models.Post.create({
-      title: faker.name.findName(),
-      summary: faker.lorem.word(),
+      title: faker.lorem.words(2),
+      summary: faker.lorem.words(5),
       body,
       status: 'pending',
       communityId: community.id,

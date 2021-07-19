@@ -1,14 +1,14 @@
-import countries from '../../user/user.countries.enum';
-import {Model, Optional, Sequelize} from "sequelize";
-import RolesValues,{Roles} from "../../user/user.roles.enum";
-import {Community} from "./community.model";
+import countries from '../../user/user.countries.enum'
+import {Model, Optional, Sequelize} from "sequelize"
+import RolesValues,{Roles} from "../../user/user.roles.enum"
+import {Community} from "./community.model"
 
 export interface User {
-  id: number;
-  name: string;
-  email: string;
-  image: string;
-  country: number;
+  id: number
+  name: string
+  email: string
+  image: string
+  country: number
   role: Roles
 }
 
@@ -21,12 +21,12 @@ export interface UserCreation extends Optional<User, 'id'> {}
 export interface UserInstance
   extends Model<User, UserCreation>,
     User {
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt?: Date
+  updatedAt?: Date
 }
 
 module.exports = (sequelize: Sequelize, DataTypes: any) => {
-  const User = sequelize.define<UserInstance>('User', {
+  const User:any = sequelize.define<UserInstance>('User', {
       id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -40,7 +40,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
       email: {
         type: DataTypes.STRING(254),
         set(val: string) {
-          this.setDataValue('email', val.toLowerCase());
+          this.setDataValue('email', val.toLowerCase())
         },
         unique: true,
         validate: {
@@ -73,7 +73,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
       underscored: true,
       indexes: [{unique: true, fields: ['email']}],
     }
-  );
+  )
 
   // @ts-ignore
   User.associate = (models: any) => {
@@ -83,8 +83,16 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
       as: 'communities',
       foreignKey: 'userId',
       otherKey: 'communityId'
-    });
+    })
   }
 
-  return User;
-};
+  User.registerHooks = () => {
+    User.addHook('afterDestroy', (post:any, options:any) => {
+      // TODO: This should be atomic
+      // TODO: remove community count -1 from all of that user communities
+    })
+
+  }
+
+  return User
+}
