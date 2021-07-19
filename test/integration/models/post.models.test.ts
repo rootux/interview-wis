@@ -1,9 +1,11 @@
 import * as faker from 'faker';
-import db from '../../../src/db/models/db.models';
-import {createMockCommunity, createMockUser} from "../../../src/mock/mock.service";
+import app from '../../../src/app'
+import MockService from "../../../src/mock/mock.service";
 
 describe('Post model', () => {
-  let thisDb: any = db
+  let thisDb: any = app.locals.db
+  let models: any = app.locals.models
+  let {mockService}:{mockService:MockService} = app.locals.services
 
   // Before any tests run, clear the DB and run migrations
   beforeAll(async () => {
@@ -11,10 +13,10 @@ describe('Post model', () => {
   })
 
   it('after updating post - body length updates', async () => {
-    const user = await createMockUser();
-    const community = await createMockCommunity();
+    const user = await mockService.createMockUser();
+    const community = await mockService.createMockCommunity();
     const body = faker.lorem.paragraph();
-    const post = await db.Post.create({
+    const post = await models.Post.create({
       title: faker.name.findName(),
       summary: faker.lorem.word(),
       body,

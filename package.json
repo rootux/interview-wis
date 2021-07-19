@@ -11,7 +11,10 @@
     "test": "run-p test:unit test:integration",
     "test:integration": "docker-compose up -d db-test && cross-env NODE_ENV=test jest --runInBand --verbose=false -c jest.config.js ./test/integration",
     "test:unit": "cross-env NODE_ENV=test jest -c jest.config.js ./test/unit",
-    "seed": "ts-node src/scripts/seed.ts"
+    "seed": "ts-node src/scripts/seed.ts",
+    "docker:startd": "docker-compose up -d",
+    "docker:start": "docker-compose up",
+    "docker:seed": "docker-compose run api npm run seed"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",

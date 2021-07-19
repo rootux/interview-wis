@@ -1,11 +1,12 @@
-import {UserInstance} from "../db/models/user.model";
+import {User, UserInstance} from "../db/models/user.model";
 
 const faker = require('faker');
 import {ModelCtor} from 'sequelize/types/lib/model';
 import { sampleRandom } from '../utils/utils.array';
-import {CommunityInstance} from "../db/models/community.model";
-import {PostInstance} from "../db/models/post.model";
+import {Community, CommunityInstance} from "../db/models/community.model";
+import {Post, PostInstance} from "../db/models/post.model";
 import {PostStatus} from "../db/models/postStatus.enum";
+import {Roles} from "../user/user.roles.enum";
 const countries = require('../user/user.countries.enum').default;
 
 export default class MockService {
@@ -19,16 +20,17 @@ export default class MockService {
     this.models = models
   }
 
-  createMockUser() {
+  createMockUser():Promise<User> {
     return this.models.User.create({
       name: faker.name.findName(),
       country: sampleRandom(countries),
       email: faker.internet.email(),
-      image: faker.image.people()
+      image: faker.image.people(),
+      role: Roles.Normal
     });
   }
 
-  createMockCommunity() {
+  createMockCommunity():Promise<Community> {
     return this.models.Community.create({
       title: faker.company.companyName(),
       image: faker.image.business(),
@@ -44,7 +46,7 @@ export default class MockService {
     }
   }
 
-  async createMockPost(user: any, communityId: any) {
+  async createMockPost(user: any, communityId: any):Promise<Post> {
     return this.models.Post.create({
       title: faker.name.findName(),
       summary: faker.lorem.word(),

@@ -2,11 +2,11 @@ import WatchlistService from "../watchlist/watchlist.service";
 import config from "../config/config";
 
 export class PostService {
-  private watchListService:WatchlistService
+  private watchlistService:WatchlistService
   private models: any;
 
-  constructor(watchListService:any, models:any) {
-    this.watchListService = watchListService
+  constructor(watchlistService:any, models:any) {
+    this.watchlistService = watchlistService
     this.models = models
   }
 
@@ -15,7 +15,7 @@ export class PostService {
 
     const post = await this.models.Post.create({title, body, summary, userId, communityId})
     const postUrl = `${config.BACKEND_URL}/communities/${communityId}/${post.id}`
-    await this.watchListService.validateAndAlert(body, postUrl)
+    await this.watchlistService.validateAndAlert(body, postUrl)
     return post
 
   }

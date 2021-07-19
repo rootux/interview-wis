@@ -4,7 +4,7 @@ import sinon from 'sinon'
 
 describe("test the AuthMiddleware Middleware", () => {
 
-  it("should set auth on request", sinon.test(async () => {
+  it("should set auth on request", (async () => {
     const req:any = {}
     const next = sinon.fake();
     const res = {}

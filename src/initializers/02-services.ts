@@ -8,18 +8,18 @@ import CommunityService from "../community/community.service";
 
 module.exports = (app:any) => {
   const {models} = app.locals
-  const watchListProvider =  new WatchlistProvider(models)
+  const watchlistProvider =  new WatchlistProvider(models)
   const userService = new UserService(models)
   const communityService = new CommunityService(app)
   const emailService =  new EmailService(models)
-  const watchListService =  new WatchlistService(watchListProvider, emailService, userService)
-  const postService = new PostService(watchListService, models)
+  const watchlistService =  new WatchlistService(watchlistProvider, emailService, userService)
+  const postService = new PostService(watchlistService, models)
   const mockService = new MockService(models)
   app.locals.services = {
     userService,
     communityService,
     emailService,
-    watchListService,
+    watchlistService,
     postService,
     mockService,
   }

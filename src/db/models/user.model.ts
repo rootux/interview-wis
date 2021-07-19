@@ -8,7 +8,7 @@ export interface User {
   email: string;
   image: string;
   country: string;
-  role?: Roles
+  role: Roles
 }
 
 interface UserCreationAttributes extends Optional<User, 'id'> {}

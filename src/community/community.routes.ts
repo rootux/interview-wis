@@ -14,7 +14,7 @@ router.get(`${BASE_URL}/`, async (req: Request, res: Response) => {
 
 router.post(`${BASE_URL}/:communityId/join`, async (req: any, res: Response) => {
   const communityId = req.params.communityId;
-  CommunityValidator(req)
+  await CommunityValidator(req)
   const {communityService}:{communityService:CommunityService} = req.app.locals.services
   const { userId } = req.auth
   const result = await communityService.join(userId, communityId)

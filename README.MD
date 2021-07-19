@@ -1,7 +1,12 @@
 # Wisdo exercise
-## Run
-`docker-compose up -d`
-`docker-compose run api npm run seed` To seed the database with data
+## First time run
+```bash
+npm run docker:startd
+# Then, Seed the database with data
+npm run docker:seed 
+# Then to see logs you can run
+npm run docker:start
+```
 Then the server would be up on http://localhost:3000
 
 ## Alternative local debug
@@ -19,6 +24,10 @@ npm run start:dev
 
 ## Testing
 Run `npm run test`
+- [Run in Band](docs/testing/run-in-band.md)
+
+## Structure
+- [Group by coupling](docs/group-by-coupling.md)
 
 ## More info
 `Dockerfile` - uses multi-stage build - has dev and production envs
@@ -35,8 +44,7 @@ I wanted to try typescript as recommended but this may not be the most well-stru
 3. Given more time, I would use an "input validation framework" instead of validating data.
 4. Some race condition that might happen - if a user scrolls the system, and now we are on the 3 hours window - 
 trying to fetch next would result inaccurate data.
-5. For production - I'll probably use redis for caching instead of node-cache (CacheService)
-6. I've seperated UserService.create and UserService.createWithRole to keep things secure - so it would be clear what does what
+5. For production - I'll probably use `redis` for caching instead of node-cache (CacheService)
 
 ## Alternative Designs
 1. An alternative to `sequelize` would be [prisma](https://www.prisma.io/) which is a raising star -

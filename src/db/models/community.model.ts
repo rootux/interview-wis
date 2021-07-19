@@ -33,17 +33,10 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
         allowNull: false
       },
       memberCount: {
-        type: DataTypes.VIRTUAL,
-        async get() {
-          const communityId = this.getDataValue('id')
-          const [results] = await sequelize.query(`
-          SELECT COUNT(community_id) FROM user_community where community_id=${communityId}
-          `);
-          // @ts-ignore
-          return results[0]['count'];
-        },
+        type: DataTypes.BIGINT,
+        allowNull: false,
+        defaultValue: 0,
       }
-
     }, {
       tableName: "community",
       underscored: true,
