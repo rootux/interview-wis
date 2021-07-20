@@ -8,7 +8,7 @@ module.exports = {
     dialectOptions: {
       //TODO: This is a quick workaround around SSL in development - in production this should be set to true
     },
-    logging: console.log
+    logging: console.log // Set this to false to prevent SQL logs when debugging
   },
   test: {
     dbUrl: process.env.DB_TEST_URL,

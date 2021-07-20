@@ -7,6 +7,7 @@ import debug from "debug";
 import {User, UserInstance, UserWithCommunities} from "../db/models/user.model";
 import {ModelCtor} from "sequelize/types/lib/model";
 import {Community, CommunityInstance} from "../db/models/community.model";
+import {PostStatus} from "../db/models/postStatus.enum";
 
 const logger = debug('wisdo:api:seed');
 
@@ -37,7 +38,8 @@ const logger = debug('wisdo:api:seed');
   await mockService.associateUsersToRandomCommunities(users, communities, 5)
 
   const usersWithCommunities:any = await models.User.findAll({include: 'communities'})
-  await mockService.createMockPosts(usersWithCommunities, 200)
+  await mockService.createMockPosts(usersWithCommunities, 150, PostStatus.approved)
+  await mockService.createMockPosts(usersWithCommunities, 50, PostStatus.pending)
   await mockService.createMockWords(['alert', 'problem', 'mandalorian'])
 
   logger('Done seeding...')

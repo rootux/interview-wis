@@ -1,5 +1,6 @@
 # Wisdo exercise
-## First time run
+
+# First time run
 ```bash
 npm run docker:startd
 # Then, Seed the database with data
@@ -8,6 +9,7 @@ npm run docker:seed
 npm run docker:start
 ```
 Then the server would be up on http://localhost:3000
+(You can use the POSTMAN file at `assets/` folder to test the server manually or jump to the [Testing section](#testing))
 
 ## Alternative local debug
 ```bash
@@ -22,7 +24,9 @@ docker-compose up -d db
 npm run start:dev
 ```
 
-## Testing
+
+#Testing
+
 Run `npm run test`
 - [Run in Band](docs/testing/run-in-band.md)
 - [Unit and integration](docs/testing/unit-and-integration.md)

@@ -16,7 +16,7 @@
     "update-feed": "ts-node src/scripts/updateFeed.ts",
     "docker:startd": "docker-compose up -d",
     "docker:start": "docker-compose up",
-    "docker:seed": "docker-compose run api npm run seed && npm run docker:update-feed",
+    "docker:seed": "docker-compose run api npm run seed",
     "docker:update-feed": "docker-compose run api npm run update-feed"
   },
   "dependencies": {

@@ -1,14 +1,14 @@
 import {User, UserInstance, UserWithCommunities} from "../db/models/user.model";
-
-const faker = require('faker');
 import {ModelCtor} from 'sequelize/types/lib/model';
-import { sampleRandom } from '../utils/utils.array';
+import {sampleRandom} from '../utils/utils.array';
 import {Community, CommunityInstance} from "../db/models/community.model";
 import {Post, PostInstance} from "../db/models/post.model";
 import {PostStatus} from "../db/models/postStatus.enum";
 import {Roles} from "../user/user.roles.enum";
 import {WatchlistInstance} from "../db/models/watchlist.model";
 import {getCountry} from "../user/user.countries.enum";
+
+const faker = require('faker');
 const countries = require('../user/user.countries.enum').default;
 
 export default class MockService {
@@ -61,7 +61,7 @@ export default class MockService {
     }
   }
 
-  async createMockPosts(users: UserWithCommunities[], count: number):Promise<Post[]> {
+  async createMockPosts(users: UserWithCommunities[], count: number, status: PostStatus=PostStatus.approved):Promise<Post[]> {
     const objects = []
     for(let i=0; i<count; i++) {
       const user = sampleRandom(users)
@@ -71,7 +71,7 @@ export default class MockService {
         title: faker.lorem.words(2),
         summary: faker.lorem.words(4),
         body: faker.lorem.words(15),
-        status: PostStatus.approved,
+        status,
         likes: i,
         communityId,
         userId: user.id
