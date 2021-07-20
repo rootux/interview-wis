@@ -7,7 +7,7 @@ describe('Post model', () => {
   let models: any = app.locals.models
   let {mockService}:{mockService:MockService} = app.locals.services
 
-  // Before any tests run, clear the DB and run migrations
+  // Clear the DB and run migrations
   beforeAll(async () => {
     await thisDb.sequelize.sync({ force: true })
   })

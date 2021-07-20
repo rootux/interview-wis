@@ -47,7 +47,11 @@ trying to fetch next would result inaccurate data.
 3. For production - I'll probably use `redis` for caching instead of node-cache (CacheService)
 4. Given more time - Part of the integration tests can be moved into a unit test by injecting them some kind of repository instead of the actual database
 5. I've used post reactions with reaction type to support different reaction in the future (Love, Cry,...)
+6. Given more time - I would unittest the routes for security measurements
+7. Given more time - I would add `newman` e2e testing to validate all is working as expected
 
 ## Alternative Designs
 1. An alternative to `sequelize` would be [prisma](https://www.prisma.io/) which is a raising star -
 I don't have enough experience with it - given more time - I might consider it
+2. A possible solution might include controllers to create another layer between the routes, and the services -
+Since the responsibility of the routes are limited I thought this would be over engineering and unneeded at this stage

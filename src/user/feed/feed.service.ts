@@ -18,6 +18,7 @@ export default class FeedService {
    * Feed is populate by the following rules:
    * section In the app where the user sees posts which are “recommended” to him. Ranked by “relevance” score - descending
    * The Feed should only include posts which belong to one of the requesting user’s communities
+   *
    * The algorithm for this feature should rank posts where the post author is from the same country first,
    * then based on the following weighted score - 80% reaction count + 20% post length.
    * this weighted score is calculated every few hours
@@ -61,7 +62,7 @@ export default class FeedService {
     const rankedPosts = await this.getRankedPostsNotFromSameCountry(
       userCountry, communitiesId, rankByReactionLimit, offset, rankByLengthLimit)
 
-    return [...rankedPostsFromSameCountry, rankedPosts]
+    return [...rankedPostsFromSameCountry, ...rankedPosts]
   }
 
   private async getRankedPostsFromSameCountry(userCountry: number, communitiesId: number[],
@@ -83,7 +84,11 @@ export default class FeedService {
                                communitiesId: number[],  rankByReactionLimit: number,
                                offset: number, rankByLengthLimit: number, countryWhere: string):Promise<any[]> {
     const [result] = await app.locals.db.sequelize.query(`
-      SELECT * from ((SELECT '1' as type,post_id,ranking from rank_by_reaction
+      SELECT id,body,community_id as "communityId",
+      length,likes,status,summary,title,created_at as "createdAt",updated_at as "updatedAt",
+      user_id as "userId"
+       
+      FROM ((SELECT '1' as type,post_id,ranking from rank_by_reaction
       WHERE country ${countryWhere} ('${userCountry}') AND community_id in(${communitiesId})
       ORDER by ranking DESC LIMIT ${rankByReactionLimit} OFFSET ${offset})
       

@@ -36,7 +36,7 @@ describe("test the Post Service", () => {
     return Post.sync({force: true})
   }
 
-  // Before any tests run, clear the DB and run migrations
+  // Clear the DB and run migrations
   beforeAll(async () => {
     await thisDb.sequelize.sync({ force: true })
     user = await mockService.createMockUser()
@@ -62,7 +62,6 @@ describe("test the Post Service", () => {
     expect(posts[1].title).toEqual(postMock2.title)
     expect(posts[1].body).toEqual(postMock2.body)
     expect(posts[1].status).toEqual(postMock2.status)
-
   })
 
   it("Should call watchlist alert for a given post", async () => {

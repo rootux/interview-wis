@@ -6,6 +6,7 @@ import WatchlistService from "../watchlist/watchlist.service";
 import WatchlistProvider from "../watchlist/watchlist.provider";
 import CommunityService from "../community/community.service";
 import FeedService from "../user/feed/feed.service";
+import FeedUpdaterService from "../user/feed/feed.updater.service";
 
 module.exports = (app:any) => {
   const {models} = app.locals
@@ -16,6 +17,7 @@ module.exports = (app:any) => {
   const watchlistService =  new WatchlistService(watchlistProvider, emailService, userService)
   const postService = new PostService(watchlistService, models)
   const feedService = new FeedService(app)
+  const feedUpdaterService = new FeedUpdaterService(app)
   const mockService = new MockService(models)
   app.locals.services = {
     userService,
@@ -24,6 +26,7 @@ module.exports = (app:any) => {
     watchlistService,
     postService,
     feedService,
+    feedUpdaterService,
     mockService
   }
 };

@@ -1,6 +1,7 @@
 import {Model, Optional, Sequelize} from "sequelize"
 import {getFirstWords} from "../../utils/utils.array"
 import {PostStatus} from "./postStatus.enum"
+import _ from "lodash";
 
 export interface Post {
   id: number
@@ -41,6 +42,10 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
     },
     body: {
       type: DataTypes.TEXT,
+      set(value:string){
+        this.setDataValue('body', value)
+        this.setDataValue('length', value?.length | 0)
+      },
       allowNull: false
     },
     communityId: {
@@ -80,7 +85,6 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
   })
 
   const addMissingData = (post:any) => {
-    post.dataValues.length = post.dataValues.body.length
     if (!post.dataValues.summary) {
       post.dataValues.summary = getFirstWords(post.dataValues.body, 100)
     }
@@ -99,6 +103,11 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
         addMissingData(post)
       }
     })
+  }
+
+  Post.pick = (post:Post) => {
+    const properties = ['title','summary','body','communityId','length','userId','status','likes']
+    return _.pick(post, ...properties)
   }
 
   return Post

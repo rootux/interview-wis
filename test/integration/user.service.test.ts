@@ -9,7 +9,7 @@ describe("test the User Service", () => {
   let thisDb: any = app.locals.db
   let {userService}:{userService:UserService} = app.locals.services
 
-  // Before any tests run, clear the DB and run migrations
+  // Clear the DB and run migrations
   beforeAll(async () => {
     await thisDb.sequelize.sync({ force: true })
   })
