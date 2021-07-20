@@ -55,6 +55,7 @@ trying to fetch next from feed would result inaccurate data.
 7. Given more time - I would fix country to be an enum (encountered [this issue](https://github.com/sequelize/sequelize/issues/2577)
 8. Given more time - I would add `newman` e2e testing to validate all is working as expected
 9. Given more time - I would increase coverage from 67% to 90%
+10. Given more time - I would add linter + husky (To validate commits aligned with linter)
 
 ## Alternative Designs
 1. An alternative to `sequelize` would be [prisma](https://www.prisma.io/) which is a raising star -
