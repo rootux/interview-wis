@@ -12,7 +12,7 @@ export default class FeedService {
     this.sequelize = app.locals.db.sequelize
   }
 
-
+  private REACTION_PERCENTAGE = 0.8
 
   /**
    * Feed is populate by the following rules:
@@ -41,8 +41,7 @@ export default class FeedService {
     const userCountry = user.country
     const communitiesId = user.communities.map(comm => comm.id)
 
-    // TODO: Math flooring testing
-    const reactionLimitSameCountry = Math.round(limit * 0.8)
+    const reactionLimitSameCountry = Math.round(limit * this.REACTION_PERCENTAGE)
     const lengthLimitSameCountry = limit - reactionLimitSameCountry
 
     // Ranked posts from the same country - always displayed first
@@ -53,10 +52,8 @@ export default class FeedService {
     if(rankedPostsFromSameCountry.length >= limit) {
       return rankedPostsFromSameCountry
     }
-
     const bucketLeft = limit - rankedPostsFromSameCountry.length
-    // TODO: Math flooring testing
-    const rankByReactionLimit = Math.round(bucketLeft * 0.8)
+    const rankByReactionLimit = Math.round(bucketLeft * this.REACTION_PERCENTAGE)
     const rankByLengthLimit = limit - rankByReactionLimit
 
     const rankedPosts = await this.getRankedPostsNotFromSameCountry(
@@ -66,10 +63,10 @@ export default class FeedService {
   }
 
   private async getRankedPostsFromSameCountry(userCountry: number, communitiesId: number[],
-                                              rankByReactionLimit: number, offset: number,
-                                              rankByLengthLimit: number):Promise<any[]> {
-    return this._getRankedPosts(userCountry, communitiesId, rankByReactionLimit, offset,
-      rankByLengthLimit, "IN")
+                                              byReactionLimit: number, offset: number,
+                                              byLengthLimit: number):Promise<any[]> {
+    return this._getRankedPosts(userCountry, communitiesId, byReactionLimit, offset,
+      byLengthLimit, "IN")
   }
 
   // When we ask posts not from the same country - we removed possible duplicated posts
@@ -81,8 +78,8 @@ export default class FeedService {
   }
 
   private async _getRankedPosts(userCountry: number,
-                               communitiesId: number[],  rankByReactionLimit: number,
-                               offset: number, rankByLengthLimit: number, countryWhere: string):Promise<any[]> {
+                               communitiesId: number[],  byReactionLimit: number,
+                               offset: number, byLengthLimit: number, countryWhere: string):Promise<any[]> {
     const [result] = await app.locals.db.sequelize.query(`
       SELECT id,body,community_id as "communityId",
       length,likes,status,summary,title,created_at as "createdAt",updated_at as "updatedAt",
@@ -90,7 +87,7 @@ export default class FeedService {
        
       FROM ((SELECT '1' as type,post_id,ranking from rank_by_reaction
       WHERE country ${countryWhere} ('${userCountry}') AND community_id in(${communitiesId})
-      ORDER by ranking DESC LIMIT ${rankByReactionLimit} OFFSET ${offset})
+      ORDER by ranking DESC LIMIT ${byReactionLimit} OFFSET ${offset})
       
       UNION ALL
       
@@ -100,10 +97,10 @@ export default class FeedService {
         -- TODO Redundant duplication to make sure no duplicated posts appear
       (SELECT post_id from rank_by_reaction
       WHERE country ${countryWhere} ('${userCountry}') AND community_id in(${communitiesId})
-      ORDER by ranking DESC LIMIT ${rankByReactionLimit} OFFSET ${offset})
+      ORDER by ranking DESC LIMIT ${byReactionLimit} OFFSET ${offset})
       )
       
-      ORDER by ranking DESC LIMIT ${rankByLengthLimit} OFFSET ${offset})) as top_posts
+      ORDER by ranking DESC LIMIT ${byLengthLimit} OFFSET ${offset})) as top_posts
       JOIN post on top_posts.post_id = post.id
       `);
     return result

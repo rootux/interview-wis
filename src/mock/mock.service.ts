@@ -63,7 +63,7 @@ export default class MockService {
 
   async createMockPosts(users: UserWithCommunities[], count: number):Promise<Post[]> {
     const objects = []
-    for(let i of Array(count)) {
+    for(let i=0; i<count; i++) {
       const user = sampleRandom(users)
       const userCommunities = user.communities
       const communityId = sampleRandom(userCommunities).id
@@ -71,7 +71,8 @@ export default class MockService {
         title: faker.lorem.words(2),
         summary: faker.lorem.words(4),
         body: faker.lorem.words(15),
-        status: PostStatus.pending,
+        status: PostStatus.approved,
+        likes: i,
         communityId,
         userId: user.id
       })
