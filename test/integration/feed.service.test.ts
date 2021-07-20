@@ -154,6 +154,8 @@ describe("test the Feed Service", () => {
     }
   })
 
+  // TODO: add more unit tests to validate a mix of posts from same country + different weights
+
   afterEach(async() => {
     await cleanPosts()
   })
