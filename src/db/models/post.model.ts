@@ -2,6 +2,7 @@ import {Model, Optional, Sequelize} from "sequelize"
 import {getFirstWords} from "../../utils/utils.array"
 import {PostStatus} from "./postStatus.enum"
 import _ from "lodash";
+import ValidationError from "../../errors/validation.error";
 
 export interface Post {
   id: number
@@ -37,15 +38,25 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
       allowNull: false
     },
     summary: {
-      type: DataTypes.STRING(150),
-      allowNull: false
+      type: DataTypes.TEXT,
+      allowNull: false,
+      validate: {
+        isLessThen150Words(value:string){
+          const wordCount = value.split(' ').length
+          if(wordCount > 150) {
+              throw new ValidationError('summary',`Summary cant be more then 150 words (${wordCount})`)
+          }
+        }
+      }
     },
     body: {
-      type: DataTypes.TEXT,
       set(value:string){
+        // @ts-ignore
         this.setDataValue('body', value)
+        // @ts-ignore
         this.setDataValue('length', value?.length | 0)
       },
+      type: DataTypes.TEXT,
       allowNull: false
     },
     communityId: {

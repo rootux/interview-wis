@@ -22,4 +22,20 @@ describe("test the AuthMiddleware Middleware", () => {
     expect(req.auth).toMatchObject({ userId: "1", role: Roles.SuperModerator })
     sinon.assert.calledOnce(next)
   }))
+
+  it("should check that isMod returns true for mods", (async () => {
+    const req:any = {query: {mod: 'supermod'}}
+    const next = sinon.fake();
+    const res = {}
+    AuthMiddleware(req, res, next)
+    expect(req.auth.isMod()).toBeTruthy()
+  }))
+
+  it("should check that isMod returns false for normal users", (async () => {
+    const req:any = {}
+    const next = sinon.fake();
+    const res = {}
+    AuthMiddleware(req, res, next)
+    expect(req.auth.isMod()).toBeFalsy()
+  }))
 })

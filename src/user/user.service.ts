@@ -16,6 +16,7 @@ export default class UserService {
 
   create(user: UserCreation) {
     const { name, email, image, country, role }:UserCreation = user
+    // @ts-ignore
     return this.models.User.create({
       name, email, image, country, role
     })

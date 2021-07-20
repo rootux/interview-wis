@@ -40,6 +40,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
       email: {
         type: DataTypes.STRING(254),
         set(val: string) {
+          // @ts-ignore
           this.setDataValue('email', val.toLowerCase())
         },
         unique: true,

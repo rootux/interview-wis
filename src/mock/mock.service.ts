@@ -13,10 +13,10 @@ const countries = require('../user/user.countries.enum').default;
 
 export default class MockService {
   private models: {
-    User: ModelCtor<UserInstance>,
-    Community: ModelCtor<CommunityInstance>,
-    Post: ModelCtor<PostInstance>,
-    Watchlist: ModelCtor<WatchlistInstance>,
+    User: any,
+    Community: any,
+    Post: any,
+    Watchlist: any,
   };
 
   constructor(models: any) {

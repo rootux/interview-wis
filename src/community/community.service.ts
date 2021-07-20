@@ -1,12 +1,10 @@
 import {ModelCtor} from "sequelize/types/lib/model";
-import {UserInstance} from "../db/models/user.model";
 import {Sequelize} from "sequelize";
-import {UserCommunityInstance} from "../db/models/userCommunity.model";
 import ValidationError from "../errors/validation.error";
 import {Community, CommunityInstance} from "../db/models/community.model";
 
 export default class CommunityService {
-  private models:{Community:ModelCtor<CommunityInstance>, User: ModelCtor<UserInstance>, UserCommunity:ModelCtor<UserCommunityInstance>}
+  private models:{Community:ModelCtor<CommunityInstance>, UserCommunity:any}
   private sequelize: Sequelize;
 
   constructor(app:any) {
@@ -32,6 +30,7 @@ export default class CommunityService {
 
     await this.sequelize.transaction(async (t) => {
       await this.models.UserCommunity.create(userCommunityParams, {transaction: t})
+      // @ts-ignore
       await this.models.Community.update({
         memberCount: Sequelize.literal('member_count+1')
       }, {
