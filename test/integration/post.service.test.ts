@@ -52,6 +52,19 @@ describe("test the Post Service", () => {
     expect(post.status).toEqual(postMock.status)
   })
 
+  it("should bulk create posts", async () => {
+    const postMock = mockPost()
+    const postMock2 = mockPost()
+    const posts = await postService.bulkCreatePosts([postMock,postMock2])
+    expect(posts[0].title).toEqual(postMock.title)
+    expect(posts[0].body).toEqual(postMock.body)
+    expect(posts[0].status).toEqual(postMock.status)
+    expect(posts[1].title).toEqual(postMock2.title)
+    expect(posts[1].body).toEqual(postMock2.body)
+    expect(posts[1].status).toEqual(postMock2.status)
+
+  })
+
   it("Should call watchlist alert for a given post", async () => {
     const postMock = mockPost()
     const fake = sinon.fake()

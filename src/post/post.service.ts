@@ -36,10 +36,18 @@ export class PostService {
   }
 
   createPost = async (post: PostCreation):Promise<Post> => {
-    const result = await this.models.Post.create(post)
-    const postUrl = `${config.BACKEND_URL}/communities/${post.communityId}/${post.id}`
-    await this.watchlistService.validateAndAlert(post.body, postUrl)
-    return result
+    return (await this.bulkCreatePosts([post]))[0]
+  }
+
+  bulkCreatePosts = async (posts: PostCreation[]):Promise<Post[]> => {
+    const createdPosts:Post[] = await this.models.Post.bulkCreate(posts)
+    let promises = []
+    for (let post of createdPosts) {
+      const postUrl = `${config.BACKEND_URL}/communities/${post.communityId}/${post.id}`
+      promises.push(this.watchlistService.validateAndAlert({content: post.body, url: postUrl}))
+    }
+    await Promise.all(promises)
+    return createdPosts
   }
 
   approve = async (communityId: number, postId: number) => {

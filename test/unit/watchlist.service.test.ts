@@ -84,7 +84,7 @@ describe("test the Watchlist Service", () => {
     emailServiceFakeFunc = sinon.fake()
     emailService = {sendEmail: emailServiceFakeFunc}
     initWatchlist(emailService)
-    const isValid = await watchlistService.validateAndAlert("This shall send a warning alert", "some-url")
+    const isValid = await watchlistService.validateAndAlert({content:"This shall send a warning alert", url:"some-url"})
     expect(isValid).toBeFalse()
     sinon.assert.calledOnce(emailServiceFakeFunc)
   })
@@ -95,7 +95,7 @@ describe("test the Watchlist Service", () => {
     initWatchlist(emailService)
     const postUrl = 'some-url'
     await watchlistService.validateAndAlert(
-      "This shall send a warning alert", postUrl)
+      {content: "This shall send a warning alert", url: postUrl})
     sinon.assert.calledWith(emailServiceFakeFunc, {
       to: modsEmails.map((e:any) => e.email),
       subject: config.TRIGGER_TITLE,

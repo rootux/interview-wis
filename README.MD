@@ -42,11 +42,11 @@ Assume `npm run update-feed` would run every 3 hours and would repopulate `RankB
 ## Comments
 1. This is my first production like Typescript project. I may error on the side of types and where to put declarations -
 I wanted to try typescript as recommended but this may not be the most well-structured typescript
-2. I've used post reactions with reaction type to support different reaction in the future (Love, Cry,...)
-3. Given more time, I would use an "input validation framework" instead of validating data.
-4. Some race condition that might happen - if a user scrolls the system, and now we are on the 3 hours window - 
+2. Some race condition that might happen - if a user scrolls the system, and now we are on the 3 hours window - 
 trying to fetch next would result inaccurate data.
-5. For production - I'll probably use `redis` for caching instead of node-cache (CacheService)
+3. For production - I'll probably use `redis` for caching instead of node-cache (CacheService)
+4. Given more time - Part of the integration tests can be moved into a unit test by injecting them some kind of repository instead of the actual database
+5. I've used post reactions with reaction type to support different reaction in the future (Love, Cry,...)
 
 ## Alternative Designs
 1. An alternative to `sequelize` would be [prisma](https://www.prisma.io/) which is a raising star -

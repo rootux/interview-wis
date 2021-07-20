@@ -7,6 +7,11 @@ import config from "../config/config";
 
 const WORDS_CACHE_TTL = 600; // 10 minutes
 
+interface MessageToValidate {
+  content: string
+  url: string
+}
+
 export default class WatchlistService {
   private emailService:EmailService;
   private watchListProvider: WatchlistProvider;
@@ -16,10 +21,6 @@ export default class WatchlistService {
     this.watchListProvider = watchListProvider
     this.emailService = emailService
     this.userService = userService
-  }
-
-  async unused() {
-
   }
 
   async getWords(): Promise<WatchedWords> {
@@ -42,15 +43,25 @@ export default class WatchlistService {
     return true;
   }
 
-  validateAndAlert = async (content:string, postUrl:string):Promise<boolean> => {
-    const isValid = await this.isContentValid(content)
-    if(isValid) return isValid
+  validateAndAlert = async (message: MessageToValidate):Promise<boolean> => {
+    return this.bulkValidateAndAlert([message])
+  }
+
+  bulkValidateAndAlert = async (messages: MessageToValidate[]):Promise<boolean> => {
+    let invalidMessages = []
+    for (let message of messages) {
+      let isValid = await this.isContentValid(message.content)
+      if(!isValid) { invalidMessages.push(message)}
+    }
+    if(invalidMessages.length <= 0) return true
+
     const modsAndSuperMods = await this.userService.getModsAndSuperMods()
     const emails = modsAndSuperMods.map((user:any) => user.email)
+
     const emailParams = {to: emails,
       subject: config.TRIGGER_TITLE,
-      body: `${config.TRIGGER_BODY} ${postUrl}`};
+      body: `${config.TRIGGER_BODY} ${invalidMessages.map(m=>m.url).toString()}`};
     await this.emailService.sendEmail(emailParams);
-    return isValid;
+    return false;
   }
 }
