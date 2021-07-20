@@ -3,7 +3,7 @@ import {PostStatus} from "../../src/db/models/postStatus.enum"
 import {User, UserInstance} from "../../src/db/models/user.model"
 import {ModelCtor} from "sequelize/types/lib/model"
 import {Community} from "../../src/db/models/community.model"
-import {Post, PostCreation, PostInstance} from "../../src/db/models/post.model";
+import {Post, PostInstance} from "../../src/db/models/post.model";
 import FeedService from "../../src/user/feed/feed.service";
 import MockService from "../../src/mock/mock.service";
 import CommunityService from "../../src/community/community.service";
@@ -21,25 +21,12 @@ describe("test the Feed Service", () => {
     Post:ModelCtor<PostInstance>} = app.locals.models
   let user:User
   let community: Community
+
   const POST_LIMIT = 20
   const REACTION_PERCENTAGE = 0.8
 
   let createMockedPosts = async(count:number, status: PostStatus):Promise<Post[]> => {
-    let posts = mockPosts(count, status)
-    const result = await postService.bulkCreatePosts(posts)
-    await feedUpdaterService.updateFeed()
-    return result
-  }
-
-  /**
-   * Posts with increasing length and increasing likes
-   * creates: {"p1 b" 1 likes}, {"p2 bb" 2 likes}, {"p3 bbb" 3 likes}, {...}
-   */
-  let createMockedPostsWithIncLikesLength = async (count:number, status: PostStatus):Promise<Post[]> => {
-    let posts = []
-    for(let i=0;i<POST_LIMIT;i++) {
-      posts.push(mockPost(`p${i} ${"b".repeat(i)}`, i+1, PostStatus.approved))
-    }
+    let posts = mockService.mockPosts(community.id, user.id, count, status)
     const result = await postService.bulkCreatePosts(posts)
     await feedUpdaterService.updateFeed()
     return result
@@ -47,25 +34,6 @@ describe("test the Feed Service", () => {
 
   let cleanPosts = async () => {
     return Post.sync({force: true})
-  }
-
-  let mockPost = (body: string, likes:number=0, status:PostStatus=PostStatus.pending):PostCreation => {
-    return {
-      title: 'title',
-      body,
-      likes,
-      communityId: community.id,
-      userId: user.id,
-      status
-    }
-  }
-
-  let mockPosts = (count: number, status:PostStatus=PostStatus.pending): PostCreation[] => {
-    let result = []
-    for (let i=0;i<count;i++) {
-      result.push(mockPost("p"+i, 0, status))
-    }
-    return result
   }
 
   let createMockUserAndJoinCommunity = async (): Promise<any[]> => {
@@ -123,7 +91,8 @@ describe("test the Feed Service", () => {
   })
 
   it("should return 80% of posts by likes and the rest 20% by length", async () => {
-    let posts = await createMockedPostsWithIncLikesLength(POST_LIMIT, PostStatus.approved)
+    let posts = await mockService.createMockedPostsWithIncLikesLength(community.id, user.id, POST_LIMIT, PostStatus.approved)
+    await feedUpdaterService.updateFeed()
     const feedPosts = await feedService.getFeed(user.id,POST_LIMIT,0)
     const [reactionPosts, lengthPosts] = sliceWindow(feedPosts, POST_LIMIT, REACTION_PERCENTAGE)
 
@@ -142,7 +111,8 @@ describe("test the Feed Service", () => {
 
   it("should allow pagination to return data 80% likes and 20% length", async () => {
     const PAGE_SIZE = 10 // TODO: Fix it for size of 9
-    await createMockedPostsWithIncLikesLength(POST_LIMIT, PostStatus.approved)
+    await mockService.createMockedPostsWithIncLikesLength(community.id, user.id, POST_LIMIT, PostStatus.approved)
+    await feedUpdaterService.updateFeed()
 
     for(let offset=0; offset<POST_LIMIT; offset+=PAGE_SIZE) {
       const feedPostsWindow = await feedService.getFeed(user.id, PAGE_SIZE, offset)

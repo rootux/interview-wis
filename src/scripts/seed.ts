@@ -38,8 +38,8 @@ const logger = debug('wisdo:api:seed');
   await mockService.associateUsersToRandomCommunities(users, communities, 5)
 
   const usersWithCommunities:any = await models.User.findAll({include: 'communities'})
-  await mockService.createMockPosts(usersWithCommunities, 150, PostStatus.approved)
-  await mockService.createMockPosts(usersWithCommunities, 50, PostStatus.pending)
+  await mockService.createMockPostsRandomly(usersWithCommunities, 150, PostStatus.approved)
+  await mockService.createMockPostsRandomly(usersWithCommunities, 50, PostStatus.pending)
   await mockService.createMockWords(['alert', 'problem', 'mandalorian'])
 
   logger('Done seeding...')

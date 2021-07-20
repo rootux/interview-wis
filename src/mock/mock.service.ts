@@ -1,12 +1,11 @@
-import {User, UserInstance, UserWithCommunities} from "../db/models/user.model";
-import {ModelCtor} from 'sequelize/types/lib/model';
+import {User, UserWithCommunities} from "../db/models/user.model";
 import {sampleRandom} from '../utils/utils.array';
-import {Community, CommunityInstance} from "../db/models/community.model";
-import {Post, PostInstance} from "../db/models/post.model";
+import {Community} from "../db/models/community.model";
+import {Post, PostCreation} from "../db/models/post.model";
 import {PostStatus} from "../db/models/postStatus.enum";
 import {Roles} from "../user/user.roles.enum";
-import {WatchlistInstance} from "../db/models/watchlist.model";
 import {getCountry} from "../user/user.countries.enum";
+import _ from "lodash";
 
 const faker = require('faker');
 const countries = require('../user/user.countries.enum').default;
@@ -61,23 +60,53 @@ export default class MockService {
     }
   }
 
-  async createMockPosts(users: UserWithCommunities[], count: number, status: PostStatus=PostStatus.approved):Promise<Post[]> {
-    const objects = []
+  async createMockPostsRandomly(users: UserWithCommunities[], count: number, status: PostStatus=PostStatus.approved):Promise<Post[]> {
+    const posts = []
     for(let i=0; i<count; i++) {
       const user = sampleRandom(users)
       const userCommunities = user.communities
       const communityId = sampleRandom(userCommunities).id
-      objects.push({
-        title: faker.lorem.words(2),
-        summary: faker.lorem.words(4),
-        body: faker.lorem.words(15),
-        status,
-        likes: i,
-        communityId,
-        userId: user.id
-      })
+      posts.push(this.mockPost(communityId, user.id, status))
     }
-    return this.models.Post.bulkCreate(objects)
+    return this.models.Post.bulkCreate(posts)
+  }
+
+  mockPosts(communityId:number, userId:number, count: number, status:PostStatus=PostStatus.pending): PostCreation[] {
+    let result = []
+    for (let i=0;i<count;i++) {
+      result.push(this.mockPost(communityId, userId, status))
+    }
+    return result
+  }
+
+  mockPost(communityId:number,
+                   userId:number,
+                   status:PostStatus = PostStatus.pending,
+                   body:string = faker.lorem.words(15),
+                   likes:number = _.random(100),
+                   title:string = faker.lorem.words(2),
+                   summary:string = faker.lorem.words(4)) {
+    return {
+      title,
+      summary,
+      body,
+      status,
+      likes,
+      communityId,
+      userId
+    };
+  }
+
+  /**
+   * Posts with increasing length and increasing likes
+   * creates: {"p1 b" 1 likes}, {"p2 bb" 2 likes}, {"p3 bbb" 3 likes}, {...}
+   */
+  async createMockedPostsWithIncLikesLength(communityId:number, userId:number, count:number, status: PostStatus):Promise<Post[]> {
+    let posts = []
+    for(let i=0;i<count;i++) {
+      posts.push(this.mockPost(communityId, userId, status, `p${i} ${"b".repeat(i)}`, i+1, ))
+    }
+    return this.models.Post.bulkCreate(posts)
   }
 
   async createMockWords(words:string[]) {
