@@ -52,9 +52,10 @@ export default class MockService {
   }
 
   async associateUsersToRandomCommunities(users: any[], communities: Community[], communitiesPerUser: number) {
+    let shuffledCommunities = _.shuffle(communities)
     for (const user of users) {
       for (let i = 0; i < communitiesPerUser; i++) {
-        const community = sampleRandom(communities);
+        const community = shuffledCommunities[(i % shuffledCommunities.length)]
         await user.addCommunity(community);
       }
     }

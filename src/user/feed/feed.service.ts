@@ -1,6 +1,5 @@
 import {Sequelize} from "sequelize";
-import app from "../../app";
-import {User, UserWithCommunities} from "../../db/models/user.model";
+import {UserWithCommunities} from "../../db/models/user.model";
 import {Post} from "../../db/models/post.model";
 
 export default class FeedService {
@@ -80,29 +79,29 @@ export default class FeedService {
   private async _getRankedPosts(userCountry: number,
                                communitiesId: number[],  byReactionLimit: number,
                                offset: number, byLengthLimit: number, countryWhere: string):Promise<any[]> {
-    const [result] = await app.locals.db.sequelize.query(`
-      SELECT id,body,community_id as "communityId",
-      length,likes,status,summary,title,created_at as "createdAt",updated_at as "updatedAt",
-      user_id as "userId"
-       
-      FROM ((SELECT '1' as type,post_id,ranking from rank_by_reaction
-      WHERE country ${countryWhere} ('${userCountry}') AND community_id in(${communitiesId})
-      ORDER by ranking DESC LIMIT ${byReactionLimit} OFFSET ${offset})
-      
-      UNION ALL
-      
-      (SELECT '2' as type,post_id,ranking from rank_by_length
-      WHERE country ${countryWhere} ('${userCountry}') AND community_id in(${communitiesId}) AND post_id not in(
-      
-        -- TODO Redundant duplication to make sure no duplicated posts appear
-      (SELECT post_id from rank_by_reaction
-      WHERE country ${countryWhere} ('${userCountry}') AND community_id in(${communitiesId})
-      ORDER by ranking DESC LIMIT ${byReactionLimit} OFFSET ${offset})
-      )
-      
-      ORDER by ranking DESC LIMIT ${byLengthLimit} OFFSET ${offset})) as top_posts
-      JOIN post on top_posts.post_id = post.id
-      `);
+    const [result] = await this.sequelize.query(`
+    SELECT id,body,community_id as "communityId",
+    length,likes,status,summary,title,created_at as "createdAt",updated_at as "updatedAt",
+    user_id as "userId",ranking, ROW_NUMBER() OVER (ORDER BY table_id ASC, ranking) as row_number
+
+    FROM ((SELECT '1' as table_id,post_id,ranking from rank_by_reaction
+    WHERE country ${countryWhere} ('${userCountry}') AND community_id in (${communitiesId})
+    ORDER by ranking ASC LIMIT ${byReactionLimit} OFFSET ${offset})
+
+    UNION ALL
+
+    (SELECT '2' as table_id,post_id,ranking from rank_by_length
+    WHERE country ${countryWhere} ('${userCountry}') AND community_id in(${communitiesId}) AND post_id not in(
+
+      -- TODO Redundant duplication to make sure no duplicated posts appear
+    (SELECT post_id from rank_by_reaction
+    WHERE country ${countryWhere} ('${userCountry}') AND community_id in(${communitiesId})
+    ORDER by ranking ASC LIMIT ${byReactionLimit} OFFSET ${offset})
+  )
+
+    ORDER by ranking ASC LIMIT ${byLengthLimit} OFFSET ${offset})) as top_posts
+    JOIN post on top_posts.post_id = post.id
+    ORDER BY row_number`)
     return result
   }
 }

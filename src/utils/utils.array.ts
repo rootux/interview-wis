@@ -3,7 +3,7 @@ const getFirstWords = (body:string, count:number): string =>{
   return body.split(' ').slice(0, count).join(' ')
 }
 // Slice an array elements by percentage
-const sliceWindow = (array:any[], count:number, percentage:number) => {
+const sliceArray = (array:any[], count:number, percentage:number) => {
   const sizeOfFirstSlice = Math.round(count * percentage)
   const firstSlice = array.slice(0, sizeOfFirstSlice)
   const secondSlice = array.slice(sizeOfFirstSlice)
@@ -13,5 +13,5 @@ const sliceWindow = (array:any[], count:number, percentage:number) => {
 export {
   sampleRandom,
   getFirstWords,
-  sliceWindow
+  sliceArray
 }
