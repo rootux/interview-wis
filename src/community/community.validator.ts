@@ -3,14 +3,25 @@ import {Request} from "express";
 import CommunityService from "./community.service";
 
 // TODO: replace with express-validator
-export default async (req:Request) => {
-  const { communityId } = req.params
-  if(isNaN(parseInt(communityId))) {
-    throw new ValidationError('communityId')
+class CommunityValidator {
+  private communityService
+
+  constructor(communityService: CommunityService) {
+    this.communityService = communityService
   }
-  const {communityService}:{communityService:CommunityService} = req.app.locals.services
-  const result = await communityService.exists(communityId)
-  if(!result) {
-    throw new ValidationError('communityId', "Community doesn't exist")
+
+  async validate(req:Request) {
+    const { communityId } = req.params
+    if(isNaN(parseInt(communityId))) {
+      throw new ValidationError('communityId')
+    }
+
+    const result = await this.communityService.exists(communityId)
+    if(!result) {
+      throw new ValidationError('communityId', "Community doesn't exist")
+    }
   }
+
 }
+
+export default CommunityValidator

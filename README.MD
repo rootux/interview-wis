@@ -60,7 +60,5 @@ trying to fetch next from feed would result inaccurate data.
 ## Alternative Designs
 1. An alternative to `sequelize` would be [prisma](https://www.prisma.io/) which is a raising star -
 I don't have enough experience with it - given more time - I might consider it
-2. A possible solution might include controllers to create another layer between the routes, and the services -
-Since the responsibility of the routes are limited I thought this would be over engineering and unneeded at this stage
-3. For security purposes - I might set some model ids to UUID so they can't be guessed in a bruteforce way
-4. Nestjs is an uprising star that has built in Dependency Injection, Opinionated framework https://nestjs.com/
+2. For security purposes - I might set some model ids to UUID so they can't be guessed in a bruteforce way
+3. Nestjs is an uprising star that has built in Dependency Injection, Opinionated framework https://nestjs.com/
