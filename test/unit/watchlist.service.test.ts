@@ -1,7 +1,7 @@
 import 'jest-extended'
 import WatchlistService from "../../src/watchlist/watchlist.service"
 import app from "../../src/app"
-import sinon, {SinonFake,SinonSpy} from "sinon";
+import sinon, {SinonSpy} from "sinon";
 import WatchlistProvider from "../../src/watchlist/watchlist.provider";
 import {WatchedWords} from "../../src/watchlist/watchlist.types";
 import UserService from "../../src/user/user.service";
@@ -72,12 +72,6 @@ describe("test the Watchlist Service", () => {
   it("should return valid content when appears in Watchlist", async () => {
     const isValid = await watchlistService.isContentValid("Nothing suspicious here")
     expect(isValid).toBeTrue()
-  })
-
-  it("should still store words in memory after db change", async () => {
-    await models.Watchlist.drop()
-    const wordsSet = await watchlistService.getWords()
-    expect(Array.from(wordsSet)).toIncludeAllMembers(testWords)
   })
 
   it("should send an email when invalid", async () => {
