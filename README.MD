@@ -63,3 +63,4 @@ I don't have enough experience with it - given more time - I might consider it
 2. A possible solution might include controllers to create another layer between the routes, and the services -
 Since the responsibility of the routes are limited I thought this would be over engineering and unneeded at this stage
 3. For security purposes - I might set some model ids to UUID so they can't be guessed in a bruteforce way
+4. Nestjs is an uprising star that has built in Dependency Injection, Opinionated framework https://nestjs.com/
