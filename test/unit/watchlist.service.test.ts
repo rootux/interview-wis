@@ -97,4 +97,11 @@ describe("test the Watchlist Service", () => {
     })
   })
 
+  it("should return invalid content when appears in Watchlist for bulk messages", async () => {
+    const isValid = await watchlistService.bulkValidateAndAlert([
+      {content:"normal message", url: 'some-url'},
+      {content: "Alert message", url: 'another-url'}])
+    expect(isValid).toBeFalse()
+  })
+
 })

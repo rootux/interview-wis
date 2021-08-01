@@ -41,12 +41,12 @@ export class PostService {
 
   bulkCreatePosts = async (posts: PostCreation[]):Promise<Post[]> => {
     const createdPosts:Post[] = await this.models.Post.bulkCreate(posts)
-    let promises = []
+    let messages = []
     for (let post of createdPosts) {
       const postUrl = `${config.BACKEND_URL}/communities/${post.communityId}/${post.id}`
-      promises.push(this.watchlistService.validateAndAlert({content: post.body, url: postUrl}))
+      messages.push({content: post.body, url: postUrl})
     }
-    await Promise.all(promises)
+    await this.watchlistService.bulkValidateAndAlert(messages)
     return createdPosts
   }
 

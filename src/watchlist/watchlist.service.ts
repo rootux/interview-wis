@@ -49,10 +49,15 @@ export default class WatchlistService {
 
   bulkValidateAndAlert = async (messages: MessageToValidate[]):Promise<boolean> => {
     let invalidMessages = []
+    let promises = []
     for (let message of messages) {
-      let isValid = await this.isContentValid(message.content)
-      if(!isValid) { invalidMessages.push(message)}
+      promises.push(this.isContentValid(message.content))
     }
+    const results = await Promise.all(promises)
+    for(let i=0; i<results.length; i++) {
+      if(!results[i]) { invalidMessages.push(messages[i])}
+    }
+
     if(invalidMessages.length <= 0) return true
 
     const modsAndSuperMods = await this.userService.getModsAndSuperMods()

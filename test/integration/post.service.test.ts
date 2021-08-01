@@ -67,7 +67,7 @@ describe("test the Post Service", () => {
   it("Should call watchlist alert for a given post", async () => {
     const postMock = mockPost()
     const fake = sinon.fake()
-    sinon.replace(watchlistService,"validateAndAlert", fake)
+    sinon.replace(watchlistService,"bulkValidateAndAlert", fake)
     await postService.createPost(postMock)
     sinon.assert.calledOnce(fake)
     sinon.restore()
